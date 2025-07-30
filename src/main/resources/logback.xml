@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- Set the root logger level to ERROR to suppress INFO and WARN messages -->
+    <root level="ERROR">
+        <appender-ref ref="CONSOLE" />
+    </root>
+
+    <!-- Configure the console appender -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Suppress SQLite warnings -->
+    <logger name="org.sqlite" level="ERROR" />
+
+    <!-- Suppress SLF4J warnings -->
+    <logger name="org.hibernate" level="ERROR" />
+    <logger name="org.springframework" level="ERROR" />
+</configuration>
