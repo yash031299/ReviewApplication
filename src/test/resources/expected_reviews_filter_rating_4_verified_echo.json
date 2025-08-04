@@ -1,0 +1,42 @@
+[
+  {
+    "id": "1",
+    "review": "Excellent product!",
+    "author": "Alice",
+    "review_source": "Amazon",
+    "title": "Great buy",
+    "product_name": "Echo Dot",
+    "reviewed_date": "2025-07-30",
+    "rating": 5
+  },
+  {
+    "id": "4",
+    "review": "",
+    "author": "Dave",
+    "review_source": "Amazon",
+    "title": "No comment",
+    "product_name": "Echo Dot",
+    "reviewed_date": "2025-07-27",
+    "rating": 4
+  },
+  {
+    "id": "7",
+    "review": "Edge case: max rating.",
+    "author": "Frank",
+    "review_source": "BestBuy",
+    "title": "Top score",
+    "product_name": "Echo Show",
+    "reviewed_date": "2025-07-24",
+    "rating": 5
+  },
+  {
+    "id": "9",
+    "review": "All fields valid.",
+    "author": "Heidi",
+    "review_source": "Amazon",
+    "title": "Solid",
+    "product_name": "Echo Dot",
+    "reviewed_date": "2025-07-22",
+    "rating": 4
+  }
+]

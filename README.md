@@ -21,7 +21,7 @@ A modern, extensible Java Swing application for managing, filtering, and analyzi
 ReviewApp/
 ├── src/
 │   └── main/
-│       └── java/com/example/reviewapp/
+│       └── java/com/reviewapp/
 │           ├── Main.java                  # Application entry point
 │           ├── adapter/                   # Adapter layer: all external interfaces
 │           │   ├── cli/                   # Command-line adapters
@@ -69,7 +69,7 @@ ReviewApp/
 ### Build & Run
 ```
 mvn clean package
-java -cp target/ReviewApp-1.0-SNAPSHOT.jar com.example.reviewapp.Main
+java -cp target/ReviewApp-1.0-SNAPSHOT.jar com.reviewapp.Main
 ```
 
 ### Usage
