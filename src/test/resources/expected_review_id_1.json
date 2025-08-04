@@ -1,0 +1,13 @@
+[
+  {
+    "id": 1,
+    "title": "Great product!",
+    "author": "Alice",
+    "rating": 5,
+    "reviewed_date": "2023-01-01",
+    "product_name": "Echo Dot",
+    "review_source": "Amazon",
+    "review": "This is an excellent device.",
+    "verifiedPurchase": true
+  }
+]

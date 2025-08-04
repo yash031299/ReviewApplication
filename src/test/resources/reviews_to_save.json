@@ -1,0 +1,13 @@
+[
+  {
+    "reviewId": 3,
+    "reviewTitle": "Love it!",
+    "authorName": "Carol",
+    "productRating": 5,
+    "reviewedDate": "2023-01-03",
+    "productName": "Echo Flex",
+    "reviewSource": "Amazon",
+    "reviewText": "Works perfectly.",
+    "verifiedPurchase": true
+  }
+]

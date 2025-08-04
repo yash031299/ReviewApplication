@@ -1,0 +1,102 @@
+[
+  {
+    "id": "1",
+    "review": "Excellent product!",
+    "author": "Alice",
+    "review_source": "Amazon",
+    "title": "Great buy",
+    "product_name": "Echo Dot",
+    "reviewed_date": "2025-07-30",
+    "rating": 5
+  },
+  {
+    "id": "2",
+    "review": "Terrible experience.",
+    "author": "Bob",
+    "review_source": "Amazon",
+    "title": "Disappointing",
+    "product_name": "Echo Dot",
+    "reviewed_date": "2025-07-29",
+    "rating": 4
+  },
+  {
+    "id": "3",
+    "review": "It's okay.",
+    "author": "Carol",
+    "review_source": "BestBuy",
+    "title": "Average",
+    "product_name": "Echo Show",
+    "reviewed_date": "2025-07-28",
+    "rating": 3
+  },
+  {
+    "id": "4",
+    "review": "",
+    "author": "Dave",
+    "review_source": "Amazon",
+    "title": "No comment",
+    "product_name": "Echo Dot",
+    "reviewed_date": "2025-07-27",
+    "rating": 2
+  },
+  {
+    "id": "5",
+    "review": "Missing rating.",
+    "author": "Eve",
+    "review_source": "Amazon",
+    "title": "Incomplete",
+    "product_name": "Echo Dot",
+    "reviewed_date": "2025-07-26",
+    "rating": 3
+  },
+  {
+    "id": "6",
+    "review": "Null author.",
+    "author": "Frank",
+    "review_source": "Amazon",
+    "title": "Anonymous",
+    "product_name": "Echo Dot",
+    "reviewed_date": "2025-07-25",
+    "rating": 2
+  },
+  {
+    "id": "7",
+    "review": "Edge case: max rating.",
+    "author": "Grace",
+    "review_source": "BestBuy",
+    "title": "Top score",
+    "product_name": "Echo Show",
+    "reviewed_date": "2025-07-24",
+    "rating": 5
+  },
+  {
+    "id": "8",
+    "review": "Edge case: min rating.",
+    "author": "Heidi",
+    "review_source": "Amazon",
+    "title": "Lowest score",
+    "product_name": "Echo Dot",
+    "reviewed_date": "2025-07-23",
+    "rating": 1
+  },
+  {
+    "id": "9",
+    "review": "All fields valid.",
+    "author": "Ivan",
+    "review_source": "Amazon",
+    "title": "Solid",
+    "product_name": "Echo Dot",
+    "reviewed_date": "2025-07-22",
+    "rating": 4
+  },
+  {
+    "id": "10",
+    "review": "No review text",
+    "author": "Judy",
+    "review_source": "Amazon",
+    "title": "No review text",
+    "product_name": "Echo Dot",
+    "reviewed_date": "2025-07-21",
+    "rating": 3
+  }
+]

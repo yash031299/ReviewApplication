@@ -1,0 +1,4 @@
+[
+  { "id": "1", "review": "No rating", "author": "A", "review_source": "Amazon", "title": "T", "product_name": "P", "reviewed_date": "2025-07-30", "rating": 3 },
+  { "id": "2", "review": "No author", "author": "B", "review_source": "Amazon", "title": "T", "product_name": "P", "reviewed_date": "2025-07-29", "rating": 4 }
+]

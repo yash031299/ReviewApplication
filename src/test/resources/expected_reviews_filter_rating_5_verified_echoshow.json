@@ -1,0 +1,12 @@
+[
+  {
+    "id": "7",
+    "review": "Edge case: max rating.",
+    "author": "Frank",
+    "review_source": "BestBuy",
+    "title": "Top score",
+    "product_name": "Echo Show",
+    "reviewed_date": "2025-07-24",
+    "rating": 5
+  }
+]

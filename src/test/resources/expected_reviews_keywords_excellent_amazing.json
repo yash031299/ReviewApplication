@@ -1,0 +1,24 @@
+[
+  {
+    "reviewId": 1,
+    "reviewTitle": "Great product!",
+    "authorName": "Alice",
+    "productRating": 5,
+    "reviewedDate": "2023-01-01",
+    "productName": "Echo Dot",
+    "reviewSource": "Amazon",
+    "reviewText": "This is an excellent device.",
+    "verifiedPurchase": true
+  },
+  {
+    "reviewId": 4,
+    "reviewTitle": "Amazing sound",
+    "authorName": "Dan",
+    "productRating": 5,
+    "reviewedDate": "2023-01-04",
+    "productName": "Echo Studio",
+    "reviewSource": "Amazon",
+    "reviewText": "Amazing sound quality.",
+    "verifiedPurchase": true
+  }
+]
