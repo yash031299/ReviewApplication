@@ -4,6 +4,7 @@ import com.reviewapp.application.service.ReviewService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import javax.swing.*;
+import java.awt.*;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -33,10 +34,7 @@ class FilterReviewsPanelTest {
         ReviewService mockService = Mockito.mock(ReviewService.class);
         FilterReviewsPanel panel = new FilterReviewsPanel(mockService);
         // Act
-        boolean hasButton = false;
-        for (java.awt.Component c : panel.getComponents()) {
-            if (c instanceof JButton) hasButton = true;
-        }
+        boolean hasButton = containsButton(panel);
         // Assert
         assertTrue(hasButton, "Panel should have at least one button");
     }
@@ -114,6 +112,19 @@ class FilterReviewsPanelTest {
         FilterReviewsPanel panel = new FilterReviewsPanel(mockService);
         // Act & Assert
         assertDoesNotThrow(() -> invokeOnLoadError(panel, new RuntimeException("Simulated error")));
+    }
+
+    /**
+     * Recursively checks if a container or its children contain a JButton.
+     */
+    private boolean containsButton(Container container) {
+        for (Component c : container.getComponents()) {
+            if (c instanceof JButton) return true;
+            if (c instanceof Container) {
+                if (containsButton((Container) c)) return true;
+            }
+        }
+        return false;
     }
 
     // Helper to access private static method via reflection

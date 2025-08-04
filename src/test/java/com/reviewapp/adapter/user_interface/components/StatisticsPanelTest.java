@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.Collections;
 import java.util.Map;
 
@@ -36,12 +37,22 @@ class StatisticsPanelTest {
         StatisticsService mockService = Mockito.mock(StatisticsService.class);
         StatisticsPanel panel = new StatisticsPanel(mockService);
         // Act
-        boolean hasButton = false;
-        for (java.awt.Component c : panel.getComponents()) {
-            if (c instanceof JButton) hasButton = true;
-        }
+        boolean hasButton = containsButton(panel);
         // Assert
         assertTrue(hasButton, "Panel should have at least one button");
+    }
+
+    /**
+     * Recursively checks if a container or its children contain a JButton.
+     */
+    private boolean containsButton(Container container) {
+        for (Component c : container.getComponents()) {
+            if (c instanceof JButton) return true;
+            if (c instanceof Container) {
+                if (containsButton((Container) c)) return true;
+            }
+        }
+        return false;
     }
 
     /**
