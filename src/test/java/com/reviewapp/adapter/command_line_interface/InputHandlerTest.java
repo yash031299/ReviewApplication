@@ -7,6 +7,7 @@ import com.reviewapp.domain.model.Review;
 import com.reviewapp.domain.model.Statistics;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -34,10 +35,9 @@ class InputHandlerTest {
     private ByteArrayOutputStream outputStream;
     private PrintStream originalOut;
 
-    /**
-     * Sets up the test fixture before each test.
-     * Initializes InputHandler with mocked services and redirects System.out for output capture.
-     */
+
+    @DisplayName("Sets up the test fixture before each test. " +
+            "Initializes InputHandler with mocked services and redirects System.out for output capture.")
     @BeforeEach
     void setUp() {
         inputHandler = new InputHandler(reviewService, statisticsService);
@@ -47,17 +47,15 @@ class InputHandlerTest {
         System.setOut(new PrintStream(outputStream));
     }
 
-    /**
-     * Restores System.out after each test to avoid side effects.
-     */
+
+    @DisplayName("Restores System.out after each test to avoid side effects.")
     @AfterEach
     void restoreSystemOut() {
         System.setOut(originalOut);
     }
 
-    /**
-     * Verifies the welcome and exit messages are printed when the REPL starts and exits.
-     */
+
+    @DisplayName("Verifies the welcome and exit messages are printed when the REPL starts and exits.")
     @Test
     void startListeningToConsole_welcomeMessagePrinted_onStartup() throws IOException {
         // Arrange
@@ -71,9 +69,8 @@ class InputHandlerTest {
         assertTrue(output.contains("Goodbye!"));
     }
 
-    /**
-     * Verifies the help command prints the list of supported commands.
-     */
+
+    @DisplayName("Verifies the help command prints the list of supported commands.")
     @Test
     void startListeningToConsole_helpCommand_printsHelp() throws IOException {
         // Arrange
@@ -88,9 +85,8 @@ class InputHandlerTest {
         assertTrue(output.contains("exit                - Exit the program"));
     }
 
-    /**
-     * Verifies the all command prints all reviews from the service.
-     */
+
+    @DisplayName("Verifies the all command prints all reviews from the service.")
     @Test
     void startListeningToConsole_allCommand_printsAllReviews() throws IOException {
         // Arrange
@@ -111,9 +107,8 @@ class InputHandlerTest {
         verify(reviewService, times(1)).getAllReviews();
     }
 
-    /**
-     * Verifies that a valid id command prints the expected review.
-     */
+
+    @DisplayName("Verifies that a valid id command prints the expected review.")
     @Test
     void startListeningToConsole_idCommandWithValidId_printsReview() throws IOException {
         // Arrange
@@ -134,9 +129,8 @@ class InputHandlerTest {
         verify(reviewService, times(1)).getReviewById(1L);
     }
 
-    /**
-     * Verifies that an invalid id prints 'Not found'.
-     */
+
+    @DisplayName("Verifies that an invalid id command prints 'Not found'")
     @Test
     void startListeningToConsole_idCommandWithInvalidId_printsNotFound() throws IOException {
         // Arrange
@@ -151,9 +145,8 @@ class InputHandlerTest {
         verify(reviewService, times(1)).getReviewById(999L);
     }
 
-    /**
-     * Verifies that a malformed id command prints an error message.
-     */
+
+    @DisplayName("Verifies that a malformed id command prints an error message.")
     @Test
     void startListeningToConsole_idCommandWithMalformedId_printsError() throws IOException {
         // Arrange
@@ -166,9 +159,8 @@ class InputHandlerTest {
         assertTrue(output.contains("Invalid ID: Please enter a valid integer."));
     }
 
-    /**
-     * Verifies the filters command prints available filter keys and formats.
-     */
+
+    @DisplayName("Verifies the filters command prints available filter keys and formats.")
     @Test
     void startListeningToConsole_filtersCommand_printsAvailableFilters() throws IOException {
         // Arrange
@@ -183,9 +175,8 @@ class InputHandlerTest {
         assertTrue(output.contains("date          : YYYY-MM-DD"));
     }
 
-    /**
-     * Verifies that a valid filter command prints the filtered reviews.
-     */
+
+    @DisplayName("Verifies that a valid filter command prints the filtered reviews.")
     @Test
     void startListeningToConsole_filterCommandWithValidFilter_printsFilteredReviews() throws IOException {
         // Arrange
@@ -207,9 +198,8 @@ class InputHandlerTest {
         verify(reviewService, times(1)).getFilteredReviewsPage(any(Filters.class), eq(1), eq(Integer.MAX_VALUE));
     }
 
-    /**
-     * Verifies that an invalid filter command prints an error message.
-     */
+
+    @DisplayName("Verifies that an invalid filter command prints an error message.")
     @Test
     void startListeningToConsole_filterCommandWithInvalidFilter_printsError() throws IOException {
         // Arrange
@@ -224,9 +214,8 @@ class InputHandlerTest {
                 "Should mention rating and range error");
     }
 
-    /**
-     * Verifies the search command prints reviews matching the search keywords.
-     */
+
+    @DisplayName("Verifies that a valid search command prints the search results.")
     @Test
     void startListeningToConsole_searchCommandWithValidSearch_printsSearchResults() throws IOException {
         // Arrange
@@ -247,9 +236,8 @@ class InputHandlerTest {
         verify(reviewService, times(1)).getReviewsByKeywords(Arrays.asList("great"));
     }
 
-    /**
-     * Verifies the stats command prints average rating and total reviews.
-     */
+
+    @DisplayName("Verifies the stats command prints average rating and total reviews.")
     @Test
     void startListeningToConsole_statsCommand_printsStats() throws IOException {
         // Arrange
@@ -269,9 +257,8 @@ class InputHandlerTest {
         verify(statisticsService, times(1)).getReviewStatistics();
     }
 
-    /**
-     * Verifies the distr command prints the rating distribution.
-     */
+
+    @DisplayName("Verifies the distr command prints the rating distribution.")
     @Test
     void startListeningToConsole_distrCommand_printsDistribution() throws IOException {
         // Arrange
@@ -292,9 +279,8 @@ class InputHandlerTest {
         verify(statisticsService, times(1)).getReviewStatistics();
     }
 
-    /**
-     * Verifies the monthly command prints monthly average ratings.
-     */
+
+    @DisplayName("Verifies the monthly command prints the monthly average ratings.")
     @Test
     void startListeningToConsole_monthlyCommand_printsMonthlyAverages() throws IOException {
         // Arrange
@@ -314,9 +300,8 @@ class InputHandlerTest {
         verify(statisticsService, times(1)).getReviewStatistics();
     }
 
-    /**
-     * Verifies the clear command attempts to clear the terminal screen.
-     */
+
+    @DisplayName("Verifies the clear command attempts to clear the terminal screen.")
     @Test
     void startListeningToConsole_clearCommand_clearsScreen() throws IOException {
         // Arrange
@@ -332,9 +317,8 @@ class InputHandlerTest {
                 "Should clear the screen with ANSI or many newlines");
     }
 
-    /**
-     * Verifies the exit command exits the REPL and prints the goodbye message.
-     */
+
+    @DisplayName("Verifies the exit command exits the REPL and prints the goodbye message.")
     @Test
     void startListeningToConsole_exitCommand_exitsProgram() throws IOException {
         // Arrange
@@ -347,9 +331,8 @@ class InputHandlerTest {
         assertTrue(output.contains("Goodbye!"));
     }
 
-    /**
-     * Verifies that receiving EOF exits the REPL gracefully.
-     */
+
+    @DisplayName("Verifies that receiving EOF exits the REPL gracefully.")
     @Test
     void startListeningToConsole_eofReceived_exitsProgram() throws IOException {
         // Arrange
@@ -363,9 +346,8 @@ class InputHandlerTest {
         assertTrue(output.contains("Goodbye!"));
     }
 
-    /**
-     * Verifies that an unknown command prints an appropriate error message.
-     */
+
+    @DisplayName("Verifies that an unknown command prints an appropriate error message.")
     @Test
     void startListeningToConsole_unknownCommand_printsUnknownCommand() throws IOException {
         // Arrange

@@ -1,6 +1,7 @@
 package com.reviewapp.domain.model;
 
 import com.reviewapp.application.exception.InvalidInputException;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -12,9 +13,8 @@ import static org.junit.jupiter.api.Assertions.*;
  * Each test follows the Arrange-Act-Assert pattern and documents the scenario tested.
  */
 class ReviewTest {
-    /**
-     * Tests that building a review with all fields sets all fields correctly.
-     */
+
+    @DisplayName("Tests that building a review with all fields sets all fields correctly")
     @Test
     void builder_buildWithAllFields_setsFieldsCorrectly() {
         // Arrange
@@ -41,9 +41,8 @@ class ReviewTest {
         assertEquals(5, review.getProductRating());
     }
 
-    /**
-     * Tests that building with only required fields sets optionals to null.
-     */
+
+    @DisplayName("Tests that building a review with only required fields sets optionals to null")
     @Test
     void builder_buildWithOnlyRequiredFields_setsOptionalsToNull() {
         // Arrange
@@ -65,9 +64,8 @@ class ReviewTest {
         assertEquals(3, review.getProductRating());
     }
 
-    /**
-     * Tests that missing reviewId throws InvalidInputException.
-     */
+
+    @DisplayName("Tests that missing reviewId throws InvalidInputException")
     @Test
     void builder_missingReviewId_throwsInvalidInputException() {
         // Arrange
@@ -79,9 +77,8 @@ class ReviewTest {
                 .build());
     }
 
-    /**
-     * Tests that missing reviewedDate throws InvalidInputException.
-     */
+
+    @DisplayName("Tests that missing reviewedDate throws InvalidInputException")
     @Test
     void builder_missingReviewedDate_throwsInvalidInputException() {
         // Arrange
@@ -92,9 +89,8 @@ class ReviewTest {
                 .build());
     }
 
-    /**
-     * Tests that missing productRating throws InvalidInputException.
-     */
+
+    @DisplayName("Tests that missing productRating throws InvalidInputException")
     @Test
     void builder_missingProductRating_throwsInvalidInputException() {
         // Arrange
@@ -106,9 +102,8 @@ class ReviewTest {
                 .build());
     }
 
-    /**
-     * Tests that productRating out of range throws InvalidInputException.
-     */
+
+    @DisplayName("Tests that productRating out of range throws InvalidInputException")
     @Test
     void builder_productRatingOutOfRange_throwsInvalidInputException() {
         // Arrange
@@ -126,9 +121,8 @@ class ReviewTest {
                 .build());
     }
 
-    /**
-     * Tests that reusing a builder after build throws InvalidInputException.
-     */
+
+    @DisplayName("Tests that reusing a builder after build throws InvalidInputException")
     @Test
     void builder_reuseAfterBuild_throwsInvalidInputException() {
         // Arrange
@@ -143,9 +137,8 @@ class ReviewTest {
         assertThrows(InvalidInputException.class, builder::build);
     }
 
-    /**
-     * Tests equals and hashCode for identical and different reviews.
-     */
+
+    @DisplayName("Tests equals and hashCode for identical and different reviews")
     @Test
     void equals_andHashCode_workForIdenticalAndDifferentReviews() {
         // Arrange
@@ -159,9 +152,8 @@ class ReviewTest {
         assertNotEquals(r1, r3);
     }
 
-    /**
-     * Tests that toString contains all fields.
-     */
+
+    @DisplayName("Tests toString contains all fields")
     @Test
     void toString_containsAllFields() {
         // Arrange
@@ -189,9 +181,8 @@ class ReviewTest {
         assertTrue(str.contains("productRating=5"));
     }
 
-    /**
-     * Tests that null and empty optional fields are accepted by the builder.
-     */
+
+    @DisplayName("Tests that null and empty optional fields are accepted by the builder")
     @Test
     void builder_nullAndEmptyOptionals_areAccepted() {
         // Arrange

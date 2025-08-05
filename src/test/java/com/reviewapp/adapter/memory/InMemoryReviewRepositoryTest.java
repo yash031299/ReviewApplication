@@ -3,6 +3,7 @@ package com.reviewapp.adapter.memory;
 import com.reviewapp.domain.model.Filters;
 import com.reviewapp.domain.model.Review;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -18,9 +19,8 @@ class InMemoryReviewRepositoryTest {
     private InMemoryReviewRepository repository;
     private List<Review> testReviews;
 
-    /**
-     * Sets up repository and test review data before each test.
-     */
+
+    @DisplayName("Sets up repository and test review data before each test.")
     @BeforeEach
     void setUp() {
         // Arrange
@@ -50,9 +50,8 @@ class InMemoryReviewRepositoryTest {
         repository.saveReviews(testReviews);
     }
 
-    /**
-     * Verifies getAllReviews returns all reviews when repository is populated.
-     */
+
+    @DisplayName("Verifies getAllReviews returns all reviews when repository is populated.")
     @Test
     void getAllReviews_returnsAllReviews_whenRepositoryPopulated() {
         // Act
@@ -64,9 +63,8 @@ class InMemoryReviewRepositoryTest {
         assertTrue(reviews.stream().anyMatch(r -> r.getReviewId().equals(2L)));
     }
 
-    /**
-     * Verifies getAllReviews returns an empty list when repository is empty.
-     */
+
+    @DisplayName("Verifies getAllReviews returns an empty list when repository is empty.")
     @Test
     void getAllReviews_returnsEmptyList_whenRepositoryEmpty() {
         // Arrange
@@ -79,9 +77,8 @@ class InMemoryReviewRepositoryTest {
         assertTrue(reviews.isEmpty());
     }
 
-    /**
-     * Verifies getReviewById returns the review when the ID exists.
-     */
+
+    @DisplayName("Verifies getReviewById returns the review when the ID exists.")
     @Test
     void getReviewById_returnsReview_whenIdExists() {
         // Act
@@ -93,9 +90,8 @@ class InMemoryReviewRepositoryTest {
         assertEquals(5, review.getProductRating());
     }
 
-    /**
-     * Verifies getReviewById returns null when the ID does not exist.
-     */
+
+    @DisplayName("Verifies getReviewById returns null when the ID does not exist.")
     @Test
     void getReviewById_returnsNull_whenIdNotExists() {
         // Act
@@ -105,9 +101,8 @@ class InMemoryReviewRepositoryTest {
         assertNull(review);
     }
 
-    /**
-     * Verifies getReviewById returns null when the ID is null.
-     */
+
+    @DisplayName("Verifies getReviewById returns null when the ID is null.")
     @Test
     void getReviewById_returnsNull_whenIdIsNull() {
         // Act
@@ -117,9 +112,8 @@ class InMemoryReviewRepositoryTest {
         assertNull(review);
     }
 
-    /**
-     * Verifies getReviewsByKeywords returns reviews matching keywords in text or title.
-     */
+
+    @DisplayName("Verifies getReviewsByKeywords returns reviews matching keywords in text or title.")
     @Test
     void getReviewsByKeywords_returnsReviews_whenKeywordsMatch() {
         // Arrange
@@ -133,9 +127,8 @@ class InMemoryReviewRepositoryTest {
         assertTrue(reviews.stream().anyMatch(r -> r.getReviewId().equals(1L)));
     }
 
-    /**
-     * Verifies getReviewsByKeywords returns an empty list when no keywords match.
-     */
+
+    @DisplayName("Verifies getReviewsByKeywords returns an empty list when no keywords match.")
     @Test
     void getReviewsByKeywords_returnsEmptyList_whenNoKeywordsMatch() {
         // Arrange
@@ -148,9 +141,8 @@ class InMemoryReviewRepositoryTest {
         assertTrue(reviews.isEmpty());
     }
 
-    /**
-     * Verifies getReviewsByKeywords returns an empty list when keywords are null or empty.
-     */
+
+    @DisplayName("Verifies getReviewsByKeywords returns an empty list when keywords are null or empty.")
     @Test
     void getReviewsByKeywords_returnsEmptyList_whenNullOrEmptyKeywords() {
         // Act & Assert
@@ -158,9 +150,8 @@ class InMemoryReviewRepositoryTest {
         assertTrue(repository.getReviewsByKeywords(Collections.emptyList()).isEmpty());
     }
 
-    /**
-     * Verifies getReviewsByFilters returns filtered reviews when filters match.
-     */
+
+    @DisplayName("Verifies getReviewsByFilters returns filtered reviews when filters match.")
     @Test
     void getReviewsByFilters_returnsFilteredReviews_whenValidFilters() {
         // Arrange
@@ -177,9 +168,8 @@ class InMemoryReviewRepositoryTest {
         assertEquals(1L, reviews.get(0).getReviewId());
     }
 
-    /**
-     * Verifies getReviewsByFilters returns an empty list when filters do not match.
-     */
+
+    @DisplayName("Verifies getReviewsByFilters returns an empty list when filters do not match.")
     @Test
     void getReviewsByFilters_returnsEmptyList_whenFiltersDontMatch() {
         // Arrange
@@ -192,9 +182,8 @@ class InMemoryReviewRepositoryTest {
         assertTrue(reviews.isEmpty());
     }
 
-    /**
-     * Verifies getReviewsByFilters returns all reviews when filters are null.
-     */
+
+    @DisplayName("Verifies getReviewsByFilters returns all reviews when filters are null.")
     @Test
     void getReviewsByFilters_returnsAll_whenFiltersNull() {
         // Act
@@ -204,9 +193,8 @@ class InMemoryReviewRepositoryTest {
         assertEquals(2, reviews.size());
     }
 
-    /**
-     * Verifies getReviewsByFilters handles all filter fields and sorting logic.
-     */
+
+    @DisplayName("Verifies getReviewsByFilters handles all filter fields and sorting logic.")
     @Test
     void getReviewsByFilters_handlesAllFieldsAndSorting() {
         // Arrange
@@ -241,9 +229,8 @@ class InMemoryReviewRepositoryTest {
         assertTrue(reviews.get(0).getProductRating() >= reviews.get(1).getProductRating());
     }
 
-    /**
-     * Verifies getReviewsByFilters returns an empty list when the page is out of bounds.
-     */
+
+    @DisplayName("Verifies getReviewsByFilters returns an empty list when the page is out of bounds.")
     @Test
     void getReviewsByFilters_returnsEmptyList_whenPageOutOfBounds() {
         // Arrange
@@ -256,9 +243,8 @@ class InMemoryReviewRepositoryTest {
         assertTrue(reviews.isEmpty());
     }
 
-    /**
-     * Verifies getReviewsByFilters returns an empty list when page size is zero or negative.
-     */
+
+    @DisplayName("Verifies getReviewsByFilters returns an empty list when page size is zero or negative.")
     @Test
     void getReviewsByFilters_returnsEmptyList_whenPageSizeZeroOrNegative() {
         // Arrange
@@ -269,9 +255,8 @@ class InMemoryReviewRepositoryTest {
         assertTrue(repository.getReviewsByFilters(filters, 1, -1).isEmpty());
     }
 
-    /**
-     * Verifies getFilteredReviewCount returns the correct count when filters match.
-     */
+
+    @DisplayName("Verifies getFilteredReviewCount returns the correct count when filters match.")
     @Test
     void getFilteredReviewCount_returnsCorrectCount_whenFiltersMatch() {
         // Arrange
@@ -284,9 +269,8 @@ class InMemoryReviewRepositoryTest {
         assertEquals(2, count);
     }
 
-    /**
-     * Verifies getFilteredReviewCount returns zero when there is no match.
-     */
+
+    @DisplayName("Verifies getFilteredReviewCount returns zero when there is no match.")
     @Test
     void getFilteredReviewCount_returnsZero_whenNoMatch() {
         // Arrange
@@ -299,9 +283,8 @@ class InMemoryReviewRepositoryTest {
         assertEquals(0, count);
     }
 
-    /**
-     * Verifies getFilteredReviewCount returns all reviews when filters are null.
-     */
+
+    @DisplayName("Verifies getFilteredReviewCount returns all reviews when filters are null.")
     @Test
     void getFilteredReviewCount_returnsAll_whenFiltersNull() {
         // Act
@@ -311,9 +294,8 @@ class InMemoryReviewRepositoryTest {
         assertEquals(2, count);
     }
 
-    /**
-     * Verifies getReviewsPage returns paged results for given page and size.
-     */
+
+    @DisplayName("Verifies getReviewsPage returns paged results for given page and size.")
     @Test
     void getReviewsPage_returnsPagedResults_whenPageAndSizeGiven() {
         // Arrange
@@ -337,9 +319,8 @@ class InMemoryReviewRepositoryTest {
         assertEquals(2L, page2.get(0).getReviewId());
     }
 
-    /**
-     * Verifies getReviewsPage returns an empty list when there is no data.
-     */
+
+    @DisplayName("Verifies getReviewsPage returns an empty list when there is no data.")
     @Test
     void getReviewsPage_returnsEmptyList_whenNoData() {
         // Arrange
@@ -352,9 +333,8 @@ class InMemoryReviewRepositoryTest {
         assertTrue(page.isEmpty());
     }
 
-    /**
-     * Verifies saveReviews saves a review when data is valid.
-     */
+
+    @DisplayName("Verifies saveReviews saves a review when data is valid.")
     @Test
     void saveReviews_savesReview_whenValidData() {
         // Arrange

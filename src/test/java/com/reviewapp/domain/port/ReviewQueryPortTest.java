@@ -1,5 +1,6 @@
 package com.reviewapp.domain.port;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -10,18 +11,15 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class ReviewQueryPortTest {
 
-    /**
-     * Tests that ReviewQueryPort is an interface.
-     */
+    @DisplayName("ReviewQueryPort is an interface")
     @Test
     void interfaceIsAccessible() {
         // Act & Assert
         assertTrue(ReviewQueryPort.class.isInterface());
     }
 
-    /**
-     * Tests that all expected methods are declared and accessible on ReviewQueryPort.
-     */
+
+    @DisplayName("All expected methods are declared and accessible on ReviewQueryPort")
     @Test
     void allMethods_declaredAndAccessible() throws ClassNotFoundException {
         // Arrange & Act & Assert

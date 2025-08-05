@@ -1,12 +1,11 @@
 package com.reviewapp.adapter.user_interface.components;
 
 import com.reviewapp.application.service.ReviewService;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -14,9 +13,8 @@ import static org.junit.jupiter.api.Assertions.*;
  * Each test follows the Arrange-Act-Assert pattern and documents the scenario tested.
  */
 class FilterReviewsPanelTest {
-    /**
-     * Tests that constructing FilterReviewsPanel with a valid service does not throw.
-     */
+
+    @DisplayName("Tests that constructing FilterReviewsPanel with a valid service does not throw")
     @Test
     void givenValidReviewService_whenPanelConstructed_thenNoException() {
         // Arrange
@@ -25,9 +23,8 @@ class FilterReviewsPanelTest {
         assertDoesNotThrow(() -> new FilterReviewsPanel(mockService));
     }
 
-    /**
-     * Tests that the panel contains a button component after construction.
-     */
+
+    @DisplayName("Tests that the panel contains a button component after construction")
     @Test
     void givenPanel_whenGetComponents_thenHasButton() {
         // Arrange
@@ -39,9 +36,8 @@ class FilterReviewsPanelTest {
         assertTrue(hasButton, "Panel should have at least one button");
     }
 
-    /**
-     * Tests that nullToEmpty returns an empty string when given null input.
-     */
+
+    @DisplayName("Tests that the nullToEmpty method returns an empty string when given null input")
     @Test
     void givenNullInput_whenNullToEmpty_thenReturnsEmptyString() {
         // Act
@@ -50,9 +46,8 @@ class FilterReviewsPanelTest {
         assertEquals("", result);
     }
 
-    /**
-     * Tests that nullToEmpty returns the same string when given non-null input.
-     */
+
+    @DisplayName("Tests that the nullToEmpty method returns the same string when given non-null input")
     @Test
     void givenNonNullInput_whenNullToEmpty_thenReturnsSameString() {
         // Arrange
@@ -63,9 +58,8 @@ class FilterReviewsPanelTest {
         assertEquals("xyz", result);
     }
 
-    /**
-     * Tests that refreshTable does not throw when given a null list.
-     */
+
+    @DisplayName("Tests that refreshTable does not throw when given a null list")
     @Test
     void givenNullList_whenRefreshTable_thenNoException() {
         // Arrange
@@ -75,9 +69,8 @@ class FilterReviewsPanelTest {
         assertDoesNotThrow(() -> invokeRefreshTable(panel, null));
     }
 
-    /**
-     * Tests that refreshTable does not throw when given an empty list.
-     */
+
+    @DisplayName("Tests that refreshTable does not throw when given an empty list")
     @Test
     void givenEmptyList_whenRefreshTable_thenNoException() {
         // Arrange
@@ -87,9 +80,8 @@ class FilterReviewsPanelTest {
         assertDoesNotThrow(() -> invokeRefreshTable(panel, java.util.Collections.emptyList()));
     }
 
-    /**
-     * Tests that onFilter does not throw when given an empty input.
-     */
+
+    @DisplayName("Tests that onFilter does not throw when given an empty input")
     @Test
     void givenEmptyInput_whenOnFilter_thenNoException() throws Exception {
         // Arrange
@@ -102,9 +94,8 @@ class FilterReviewsPanelTest {
         assertDoesNotThrow(() -> invokeOnFilter(panel));
     }
 
-    /**
-     * Tests that onLoadError does not throw when given a simulated error.
-     */
+
+    @DisplayName("Tests that onLoadError does not throw when given a simulated error")
     @Test
     void givenSimulatedError_whenSwingWorkerErrorHandlerInvoked_thenNoException() throws Exception {
         // Arrange
@@ -114,9 +105,8 @@ class FilterReviewsPanelTest {
         assertDoesNotThrow(() -> invokeOnLoadError(panel, new RuntimeException("Simulated error")));
     }
 
-    /**
-     * Recursively checks if a container or its children contain a JButton.
-     */
+
+    @DisplayName("Recursively checks if a container or its children contain a JButton")
     private boolean containsButton(Container container) {
         for (Component c : container.getComponents()) {
             if (c instanceof JButton) return true;

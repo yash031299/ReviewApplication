@@ -6,12 +6,14 @@ import com.reviewapp.domain.port.ReviewQueryPort;
 import com.reviewapp.domain.port.ReviewWritePort;
 import com.reviewapp.adapter.ingest.JsonParser;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -21,6 +23,7 @@ import static org.mockito.Mockito.*;
  * Unit tests for {@link ReviewService} covering all service methods, integration with ports, and error handling.
  * Each test follows Arrange-Act-Assert and documents scenario and edge cases.
  */
+
 @ExtendWith(MockitoExtension.class)
 class ReviewServiceTest {
 
@@ -32,9 +35,8 @@ class ReviewServiceTest {
 
     private ReviewService reviewService;
 
-    /**
-     * Sets up a new ReviewService with mocked ports before each test.
-     */
+
+    @DisplayName("Sets up a new ReviewService with mocked ports before each test.")
     @BeforeEach
     void setUp() {
         reviewService = new ReviewService(queryPort, writePort);
@@ -42,9 +44,7 @@ class ReviewServiceTest {
 
     // --- getAllReviews ---
 
-    /**
-     * Tests that getAllReviews returns all reviews from the query port.
-     */
+    @DisplayName("Verifies that getAllReviews returns all reviews from the query port.")
     @Test
     void getAllReviews_returnsAllReviewsFromResource() throws IOException {
         // Arrange
@@ -59,9 +59,7 @@ class ReviewServiceTest {
 
     // --- getReviewsByKeywords ---
 
-    /**
-     * Tests that getReviewsByKeywords returns reviews for a single keyword.
-     */
+    @DisplayName("Verifies that getReviewsByKeywords returns reviews for a single keyword.")
     @Test
     void getReviewsByKeywords_givenKeywordExcellent_returnsExpectedReviews() throws IOException {
         // Arrange
@@ -74,9 +72,8 @@ class ReviewServiceTest {
         verify(queryPort).getReviewsByKeywords(List.of("Excellent"));
     }
 
-    /**
-     * Tests that getReviewsByKeywords returns reviews for multiple keywords.
-     */
+
+    @DisplayName("Verifies that getReviewsByKeywords returns reviews for multiple keywords.")
     @Test
     void getReviewsByKeywords_givenMultipleKeywords_returnsExpectedReviews() throws IOException {
         // Arrange
@@ -89,11 +86,38 @@ class ReviewServiceTest {
         verify(queryPort).getReviewsByKeywords(List.of("Excellent", "Amazing"));
     }
 
+    @DisplayName("Verifies that getReviewsByKeywords throws if keywords list contains null, empty, or whitespace-only strings.")
+    @Test
+    void getReviewsByKeywords_givenInvalidKeywords_throwsException() {
+        // null keyword in list
+        List<String> withNull = Arrays.asList("valid", null);
+        assertThrows(com.reviewapp.application.exception.InvalidInputException.class,
+                () -> reviewService.getReviewsByKeywords(withNull));
+        // empty string in list
+        List<String> withEmpty = Arrays.asList("valid", "");
+        assertThrows(com.reviewapp.application.exception.InvalidInputException.class,
+                () -> reviewService.getReviewsByKeywords(withEmpty));
+        // whitespace string in list
+        List<String> withWhitespace = Arrays.asList("valid", "   ");
+        assertThrows(com.reviewapp.application.exception.InvalidInputException.class,
+                () -> reviewService.getReviewsByKeywords(withWhitespace));
+    }
+
+    @DisplayName("Verifies that getReviewsByKeywords throws if single keyword is null, empty, or whitespace-only.")
+    @Test
+    void getReviewsByKeywords_singleInvalidKeyword_throwsException() {
+        assertThrows(com.reviewapp.application.exception.InvalidInputException.class,
+                () -> reviewService.getReviewsByKeywords(Arrays.asList((String) null)));
+        assertThrows(com.reviewapp.application.exception.InvalidInputException.class,
+                () -> reviewService.getReviewsByKeywords(List.of("")));
+        assertThrows(com.reviewapp.application.exception.InvalidInputException.class,
+                () -> reviewService.getReviewsByKeywords(List.of("   ")));
+    }
+
     // --- getFilteredReviewsPage ---
 
-    /**
-     * Tests that getFilteredReviewsPage returns reviews for a rating filter.
-     */
+
+    @DisplayName("Verifies that getFilteredReviewsPage returns reviews for a rating filter.")
     @Test
     void getFilteredReviewsPage_givenRating5Filter_returnsExpectedReviews() throws IOException {
         // Arrange
@@ -123,9 +147,8 @@ class ReviewServiceTest {
         verify(queryPort).getReviewsByFilters(filters, 1, 10);
     }
 
-    /**
-     * Tests that getFilteredReviewsPage returns reviews for multiple filters.
-     */
+
+    @DisplayName("Verifies that getFilteredReviewsPage returns reviews for multiple filters.")
     @Test
     void getFilteredReviewsPage_givenMultipleFilters_returnsExpectedReviews() throws IOException {
         // Arrange
@@ -142,9 +165,8 @@ class ReviewServiceTest {
         verify(queryPort).getReviewsByFilters(filters, 2, 5);
     }
 
-    /**
-     * Tests that getFilteredReviewsPage returns reviews for rating, product, and other filters.
-     */
+
+    @DisplayName("Verifies that getFilteredReviewsPage returns reviews for rating, product, and other filters.")
     @Test
     void getFilteredReviewsPage_givenRating4VerifiedAndProductEcho_returnsExpectedReviews() throws IOException {
         // Arrange
@@ -161,9 +183,8 @@ class ReviewServiceTest {
         verify(queryPort).getReviewsByFilters(filters, 1, 10);
     }
 
-    /**
-     * Tests that getFilteredReviewsPage returns reviews for rating, product, and page filters.
-     */
+
+    @DisplayName("Verifies that getFilteredReviewsPage returns reviews for rating, product, and page filters.")
     @Test
     void getFilteredReviewsPage_givenRating3UnverifiedAndProductDot_returnsExpectedReviews() throws IOException {
         // Arrange
@@ -180,9 +201,8 @@ class ReviewServiceTest {
         verify(queryPort).getReviewsByFilters(filters, 2, 5);
     }
 
-    /**
-     * Tests that getFilteredReviewsPage returns reviews when all filters are set.
-     */
+
+    @DisplayName("Verifies that getFilteredReviewsPage returns reviews for all filters.")
     @Test
     void getFilteredReviewsPage_givenAllFilters_returnsExpectedReviews() throws IOException {
         // Arrange
@@ -200,9 +220,8 @@ class ReviewServiceTest {
         verify(queryPort).getReviewsByFilters(filters, 1, 10);
     }
 
-    /**
-     * Tests that getFilteredReviewsPage returns an empty list when no reviews match the filters.
-     */
+
+    @DisplayName("Verifies that getFilteredReviewsPage returns an empty list when no reviews match the filters.")
     @Test
     void getFilteredReviewsPage_givenFiltersWithNoResults_returnsEmptyList() throws IOException {
         // Arrange
@@ -219,9 +238,8 @@ class ReviewServiceTest {
         verify(queryPort).getReviewsByFilters(filters, 1, 10);
     }
 
-    /**
-     * Tests that getFilteredReviewsPage returns reviews when only max rating is set.
-     */
+
+    @DisplayName("Verifies that getFilteredReviewsPage returns reviews when only max rating is set.")
     @Test
     void getFilteredReviewsPage_givenMaxRatingOnly_returnsExpectedReviews() throws IOException {
         // Arrange
@@ -237,9 +255,8 @@ class ReviewServiceTest {
         verify(queryPort).getReviewsByFilters(filters, 1, 10);
     }
 
-    /**
-     * Tests that getFilteredReviewsPage returns reviews when only product name is set.
-     */
+
+    @DisplayName("Verifies that getFilteredReviewsPage returns reviews when only product name is set.")
     @Test
     void getFilteredReviewsPage_givenProductNameOnly_returnsExpectedReviews() throws IOException {
         // Arrange
@@ -255,4 +272,165 @@ class ReviewServiceTest {
         verify(queryPort).getReviewsByFilters(filters, 1, 10);
     }
 
+
+    @DisplayName("Verifies that getFilteredReviewCount returns correct count from query port.")
+    @Test
+    void getFilteredReviewCount_returnsCountFromQueryPort() {
+        Filters filters = new Filters.Builder().setMinRating(4).build();
+        when(queryPort.getFilteredReviewCount(filters)).thenReturn(5);
+        int count = reviewService.getFilteredReviewCount(filters);
+        assertEquals(5, count);
+        verify(queryPort).getFilteredReviewCount(filters);
+    }
+
+
+    @DisplayName("Verifies that getFilteredReviewCount throws if filters is null.")
+    @Test
+    void getFilteredReviewCount_givenNullFilters_throwsException() {
+        assertThrows(com.reviewapp.application.exception.InvalidInputException.class,
+                () -> reviewService.getFilteredReviewCount(null));
+    }
+
+
+    @DisplayName("Verifies that getTotalReviewCount returns correct count from query port.")
+    @Test
+    void getTotalReviewCount_returnsCountFromQueryPort() {
+        when(queryPort.getTotalReviewCount()).thenReturn(10);
+        int count = reviewService.getTotalReviewCount();
+        assertEquals(10, count);
+        verify(queryPort).getTotalReviewCount();
+    }
+
+
+    @DisplayName("Verifies that getReviewsPage returns paged reviews from query port.")
+    @Test
+    void getReviewsPage_returnsPagedReviewsFromQueryPort() {
+        List<Review> expected = List.of(mock(Review.class));
+        when(queryPort.getReviewsPage(1, 5)).thenReturn(expected);
+        List<Review> actual = reviewService.getReviewsPage(1, 5);
+        assertEquals(expected, actual);
+        verify(queryPort).getReviewsPage(1, 5);
+    }
+
+
+    @DisplayName("Verifies that getReviewsPage throws if page or pageSize is invalid.")
+    @Test
+    void getReviewsPage_invalidPageOrSize_throwsException() {
+        assertThrows(com.reviewapp.application.exception.InvalidInputException.class,
+                () -> reviewService.getReviewsPage(0, 5));
+        assertThrows(com.reviewapp.application.exception.InvalidInputException.class,
+                () -> reviewService.getReviewsPage(1, 0));
+    }
+
+
+
+    @DisplayName("Verifies that getReviewById returns review from query port.")
+    @Test
+    void getReviewById_returnsReviewFromQueryPort() {
+        Review expected = mock(Review.class);
+        when(queryPort.getReviewById(1L)).thenReturn(expected);
+        Review actual = reviewService.getReviewById(1L);
+        assertEquals(expected, actual);
+        verify(queryPort).getReviewById(1L);
+    }
+
+
+    @DisplayName("Verifies that getReviewById throws if id is not positive.")
+    @Test
+    void getReviewById_invalidId_throwsException() {
+        assertThrows(com.reviewapp.application.exception.InvalidInputException.class,
+                () -> reviewService.getReviewById(0));
+        assertThrows(com.reviewapp.application.exception.InvalidInputException.class,
+                () -> reviewService.getReviewById(-1));
+    }
+
+
+    @DisplayName("Verifies that saveReviews delegates to write port.")
+    @Test
+    void saveReviews_validList_delegatesToWritePort() {
+        List<Review> reviews = List.of(mock(Review.class));
+        reviewService.saveReviews(reviews);
+        verify(writePort).saveReviews(reviews);
+    }
+
+    @DisplayName("Verifies that saveReviews throws if any review in a multi-element list is null.")
+    @Test
+    void saveReviews_multiElementListWithNullReview_throwsException() {
+        List<Review> reviews = Arrays.asList(mock(Review.class), null, mock(Review.class));
+        assertThrows(com.reviewapp.application.exception.InvalidInputException.class,
+                () -> reviewService.saveReviews(reviews));
+    }
+
+    @DisplayName("Verifies that saveReviews throws if first element in two-element list is null.")
+    @Test
+    void saveReviews_firstElementNullInTwoElementList_throwsException() {
+        List<Review> reviews = Arrays.asList(null, mock(Review.class));
+        assertThrows(com.reviewapp.application.exception.InvalidInputException.class,
+                () -> reviewService.saveReviews(reviews));
+    }
+
+    @DisplayName("Verifies that saveReviews throws if second element in two-element list is null.")
+    @Test
+    void saveReviews_secondElementNullInTwoElementList_throwsException() {
+        List<Review> reviews = Arrays.asList(mock(Review.class), null);
+        assertThrows(com.reviewapp.application.exception.InvalidInputException.class,
+                () -> reviewService.saveReviews(reviews));
+    }
+
+    @DisplayName("Verifies that saveReviews throws if write port is null.")
+    @Test
+    void saveReviews_noWritePort_throwsException() {
+        ReviewService readOnlyService = new ReviewService(queryPort, null);
+        assertThrows(com.reviewapp.application.exception.InvalidInputException.class,
+                () -> readOnlyService.saveReviews(List.of(mock(Review.class))));
+    }
+
+
+    @DisplayName("Verifies that saveReviews throws if reviews list is null or empty.")
+    @Test
+    void saveReviews_nullOrEmptyList_throwsException() {
+        assertThrows(com.reviewapp.application.exception.InvalidInputException.class,
+                () -> reviewService.saveReviews(null));
+        assertThrows(com.reviewapp.application.exception.InvalidInputException.class,
+                () -> reviewService.saveReviews(List.of()));
+    }
+
+
+    @DisplayName("Verifies that saveReviews throws if any review in the list is null.")
+    @Test
+    void saveReviews_listWithNullReview_throwsException() {
+        List<Review> reviews = Arrays.asList((Review) null);
+        assertThrows(com.reviewapp.application.exception.InvalidInputException.class,
+                () -> reviewService.saveReviews(reviews));
+    }
+
+    @DisplayName("Verifies that writePort is not called if saveReviews throws before delegation.")
+    @Test
+    void saveReviews_invalidInput_writePortNotCalled() {
+        try {
+            reviewService.saveReviews(null);
+        } catch (Exception ignored) {}
+        try {
+            reviewService.saveReviews(List.of());
+        } catch (Exception ignored) {}
+        try {
+            reviewService.saveReviews(Arrays.asList((Review) null));
+        } catch (Exception ignored) {}
+        verify(writePort, never()).saveReviews(any());
+    }
+
+    @DisplayName("Verifies that ReviewService constructor throws if queryPort is null.")
+    @Test
+    void constructor_givenNullQueryPort_throwsException() {
+        assertThrows(NullPointerException.class,
+                () -> new ReviewService(null, writePort));
+    }
+
+    @DisplayName("Verifies that ReviewService constructor throws NullPointerException with correct message for null queryPort.")
+    @Test
+    void constructor_givenNullQueryPort_throwsNullPointerExceptionWithMessage() {
+        NullPointerException ex = assertThrows(NullPointerException.class,
+                () -> new ReviewService(null, writePort));
+        assertTrue(ex.getMessage().contains("queryPort must not be null"));
+    }
 }

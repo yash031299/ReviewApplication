@@ -1,6 +1,7 @@
 package com.reviewapp.adapter.user_interface.components;
 
 import com.reviewapp.application.service.ReviewService;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import javax.swing.*;
@@ -13,9 +14,8 @@ import static org.junit.jupiter.api.Assertions.*;
  * Each test follows the Arrange-Act-Assert pattern and documents the scenario tested.
  */
 class AllReviewsPanelTest {
-    /**
-     * Tests that constructing AllReviewsPanel with a valid service does not throw.
-     */
+
+    @DisplayName("Tests that constructing AllReviewsPanel with a valid service does not throw")
     @Test
     void givenValidReviewService_whenPanelConstructed_thenNoException() {
         // Arrange
@@ -24,9 +24,8 @@ class AllReviewsPanelTest {
         assertDoesNotThrow(() -> new AllReviewsPanel(mockService));
     }
 
-    /**
-     * Tests that the panel contains a scroll pane or table component after construction.
-     */
+
+    @DisplayName("Tests that the panel contains a scroll pane or table component after construction")
     @Test
     void givenPanel_whenGetComponents_thenHasScrollOrTable() {
         // Arrange
@@ -43,9 +42,8 @@ class AllReviewsPanelTest {
         assertTrue(hasScroll || hasTable, "Panel should have scroll or table");
     }
 
-    /**
-     * Tests that the nullToEmpty method returns an empty string when given null input.
-     */
+
+    @DisplayName("Tests that the nullToEmpty method returns an empty string when given null input")
     @Test
     void givenNullInput_whenNullToEmpty_thenReturnsEmptyString() {
         // Act
@@ -54,9 +52,8 @@ class AllReviewsPanelTest {
         assertEquals("", result);
     }
 
-    /**
-     * Tests that the nullToEmpty method returns the same string when given non-null input.
-     */
+
+    @DisplayName("Tests that the nullToEmpty method returns the same string when given non-null input")
     @Test
     void givenNonNullInput_whenNullToEmpty_thenReturnsSameString() {
         // Arrange
@@ -67,9 +64,8 @@ class AllReviewsPanelTest {
         assertEquals("abc", result);
     }
 
-    /**
-     * Tests that refreshing the table with a null list does not throw.
-     */
+
+    @DisplayName("Tests that refreshing the table with a null list does not throw")
     @Test
     void givenNullList_whenRefreshTable_thenNoException() {
         // Arrange
@@ -79,9 +75,8 @@ class AllReviewsPanelTest {
         assertDoesNotThrow(() -> invokeRefreshTable(panel, null));
     }
 
-    /**
-     * Tests that refreshing the table with an empty list does not throw.
-     */
+
+    @DisplayName("Tests that refreshing the table with an empty list does not throw")
     @Test
     void givenEmptyList_whenRefreshTable_thenNoException() {
         // Arrange
@@ -91,9 +86,8 @@ class AllReviewsPanelTest {
         assertDoesNotThrow(() -> invokeRefreshTable(panel, java.util.Collections.emptyList()));
     }
 
-    /**
-     * Tests that the error handler does not throw when invoked with a simulated error.
-     */
+
+    @DisplayName("Tests that onLoadError does not throw when given a simulated error")
     @Test
     void givenSimulatedError_whenSwingWorkerErrorHandlerInvoked_thenNoException() throws Exception {
         // Arrange

@@ -1,5 +1,6 @@
 package com.reviewapp.boot.bootstrap;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -14,18 +15,15 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class FileStalenessCheckerTest {
 
-    /**
-     * Tests that the utility class cannot be instantiated and throws AssertionError.
-     */
+    @DisplayName("Tests that the utility class cannot be instantiated and throws AssertionError.")
     @Test
     void classLoadsWithoutError() {
         // Act & Assert
         assertThrows(AssertionError.class, FileStalenessChecker::new);
     }
 
-    /**
-     * Tests that passing null as the JSON path string throws NullPointerException.
-     */
+
+    @DisplayName("Tests that passing null as the JSON path string throws NullPointerException.")
     @Test
     void isParsingRequiredFromJson_whenJsonPathIsNull_throwsNullPointerException() {
         // Arrange
@@ -33,9 +31,8 @@ class FileStalenessCheckerTest {
         assertThrows(NullPointerException.class, () -> FileStalenessChecker.isParsingRequiredFromJson((String)null));
     }
 
-    /**
-     * Tests that passing a blank JSON path string throws IllegalArgumentException.
-     */
+
+    @DisplayName("Tests that passing a blank JSON path string throws IllegalArgumentException.")
     @Test
     void isParsingRequiredFromJson_whenJsonPathIsBlank_throwsIllegalArgumentException() {
         // Arrange
@@ -43,9 +40,8 @@ class FileStalenessCheckerTest {
         assertThrows(IllegalArgumentException.class, () -> FileStalenessChecker.isParsingRequiredFromJson("   "));
     }
 
-    /**
-     * Tests that passing a non-existent JSON file path throws IllegalArgumentException.
-     */
+
+    @DisplayName("Tests that passing a non-existent JSON file path throws IllegalArgumentException.")
     @Test
     void isParsingRequiredFromJson_whenJsonFileDoesNotExist_throwsIllegalArgumentException() {
         // Arrange
@@ -54,9 +50,8 @@ class FileStalenessCheckerTest {
         assertThrows(IllegalArgumentException.class, () -> FileStalenessChecker.isParsingRequiredFromJson(missing.toString()));
     }
 
-    /**
-     * Tests that parsing is required if the DB file does not exist.
-     */
+
+    @DisplayName("Tests that parsing is required if the DB file does not exist.")
     @Test
     void isParsingRequiredFromJson_whenDbDoesNotExist_returnsTrue() throws IOException {
         // Arrange
@@ -70,9 +65,8 @@ class FileStalenessCheckerTest {
         Files.delete(json);
     }
 
-    /**
-     * Tests that parsing is required if the JSON file is newer than the DB file.
-     */
+
+    @DisplayName("Tests that parsing is required if the JSON file is newer than the DB file.")
     @Test
     void isParsingRequiredFromJson_whenJsonIsNewerThanDb_returnsTrue() throws IOException {
         // Arrange
@@ -92,9 +86,8 @@ class FileStalenessCheckerTest {
         Files.delete(json);
     }
 
-    /**
-     * Tests that parsing is not required if the JSON file is older than the DB file.
-     */
+
+    @DisplayName("Tests that parsing is not required if the JSON file is older than the DB file.")
     @Test
     void isParsingRequiredFromJson_whenJsonIsOlderThanDb_returnsFalse() throws IOException {
         // Arrange
@@ -114,9 +107,8 @@ class FileStalenessCheckerTest {
         Files.delete(json);
     }
 
-    /**
-     * Tests that an IO error while checking file times throws IllegalStateException.
-     */
+
+    @DisplayName("Tests that an IO error while checking file times throws IllegalStateException.")
     @Test
     void isParsingRequiredFromJson_whenIoErrorOccurs_throwsIllegalStateException() throws Exception {
         Path db = Files.createTempFile("test", ".db");
@@ -131,9 +123,8 @@ class FileStalenessCheckerTest {
         }
     }
 
-    /**
-     * Tests that null DB path throws NullPointerException (Path overload).
-     */
+
+    @DisplayName("Tests that null DB path throws NullPointerException (Path overload).")
     @Test
     void isParsingRequiredFromJson_whenDbPathIsNull_throwsNullPointerException() {
         // Arrange
@@ -142,9 +133,8 @@ class FileStalenessCheckerTest {
         assertThrows(NullPointerException.class, () -> FileStalenessChecker.isParsingRequiredFromJson(null, json));
     }
 
-    /**
-     * Tests that null JSON path throws NullPointerException (Path overload).
-     */
+
+    @DisplayName("Tests that null JSON path throws NullPointerException (Path overload).")
     @Test
     void isParsingRequiredFromJson_whenJsonPathIsNullPathOverload_throwsNullPointerException() {
         // Arrange
@@ -153,9 +143,8 @@ class FileStalenessCheckerTest {
         assertThrows(NullPointerException.class, () -> FileStalenessChecker.isParsingRequiredFromJson(db, null));
     }
 
-    /**
-     * Tests that a non-existent JSON file (Path overload) throws IllegalArgumentException.
-     */
+
+    @DisplayName("Tests that a non-existent JSON file (Path overload) throws IllegalArgumentException.")
     @Test
     void isParsingRequiredFromJson_whenJsonFileDoesNotExistPathOverload_throwsIllegalArgumentException() {
         // Arrange
@@ -165,9 +154,8 @@ class FileStalenessCheckerTest {
         assertThrows(IllegalArgumentException.class, () -> FileStalenessChecker.isParsingRequiredFromJson(db, missingJson));
     }
 
-    /**
-     * Tests that the utility class constructor throws AssertionError (duplicate for completeness).
-     */
+
+    @DisplayName("Tests that the utility class constructor throws AssertionError.")
     @Test
     void constructor_whenInstantiated_throwsAssertionError() {
         // Arrange

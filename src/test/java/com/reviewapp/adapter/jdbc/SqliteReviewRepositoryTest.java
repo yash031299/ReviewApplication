@@ -15,17 +15,14 @@ class SqliteReviewRepositoryTest {
     private static final String DB_URL = "jdbc:sqlite:target/test-reviews.db";
     private SqliteReviewRepository repository;
 
-    /**
-     * Sets up a fresh repository instance before each test using a file-based SQLite DB.
-     */
+    @DisplayName("Sets up a fresh repository instance before each test using a file-based SQLite DB.")
     @BeforeEach
     void setUp() {
         repository = new SqliteReviewRepository(DB_URL);
     }
 
-    /**
-     * Cleans up the reviews table after each test for isolation.
-     */
+
+    @DisplayName("Cleans up the reviews table after each test for isolation.")
     @AfterEach
     void cleanup() {
         // Optionally clear the table after each test for isolation
@@ -34,9 +31,8 @@ class SqliteReviewRepositoryTest {
         } catch (Exception ignored) {}
     }
 
-    /**
-     * Verifies that the repository constructor creates the reviews table and can persist and count reviews.
-     */
+
+    @DisplayName("Verifies that the repository constructor creates the reviews table and can persist and count reviews.")
     @Test
     void constructor_createsTable_whenValidUrl() {
         // Arrange
@@ -59,9 +55,8 @@ class SqliteReviewRepositoryTest {
         assertEquals(1, count);
     }
 
-    /**
-     * Verifies that an invalid JDBC URL causes a RuntimeException during construction.
-     */
+
+    @DisplayName("Verifies that an invalid JDBC URL causes a RuntimeException during construction.")
     @Test
     void constructor_throwsRuntimeException_whenInvalidUrl() {
         // Arrange
@@ -72,18 +67,16 @@ class SqliteReviewRepositoryTest {
         assertTrue(ex.getMessage().contains("Failed to create 'reviews' table"));
     }
 
-    /**
-     * Verifies that passing a null URL to the constructor throws NullPointerException.
-     */
+
+    @DisplayName("Verifies that passing a null URL to the constructor throws NullPointerException.")
     @Test
     void constructor_throwsNullPointerException_whenUrlIsNull() {
         // Act & Assert
         assertThrows(NullPointerException.class, () -> new SqliteReviewRepository(null));
     }
 
-    /**
-     * Verifies that saveReviews inserts and updates reviews as expected.
-     */
+
+    @DisplayName("Verifies that saveReviews inserts and updates reviews as expected.")
     @Test
     void saveReviews_insertsAndUpdatesReviews_whenValidInput() {
         // Arrange
@@ -110,9 +103,8 @@ class SqliteReviewRepositoryTest {
         assertEquals(3, fetched.getProductRating());
     }
 
-    /**
-     * Verifies that a SQL error during saveReviews throws a RuntimeException.
-     */
+
+    @DisplayName("Verifies that a SQL error during saveReviews throws a RuntimeException.")
     @Test
     void saveReviews_throwsRuntimeException_whenSqlErrorOccurs() {
         // Arrange
@@ -129,18 +121,16 @@ class SqliteReviewRepositoryTest {
         assertTrue(ex.getMessage().contains("Error saving reviews batch"));
     }
 
-    /**
-     * Verifies that passing null to saveReviews throws NullPointerException.
-     */
+
+    @DisplayName("Verifies that passing null to saveReviews throws NullPointerException.")
     @Test
     void saveReviews_throwsNullPointerException_whenListIsNull() {
         // Act & Assert
         assertThrows(NullPointerException.class, () -> repository.saveReviews(null));
     }
 
-    /**
-     * Verifies that a null review in the list passed to saveReviews throws NullPointerException.
-     */
+
+    @DisplayName("Verifies that a null review in the list passed to saveReviews throws NullPointerException.")
     @Test
     void saveReviews_throwsNullPointerException_whenReviewInListIsNull() {
         // Arrange
@@ -151,9 +141,8 @@ class SqliteReviewRepositoryTest {
         assertThrows(NullPointerException.class, () -> repository.saveReviews(reviews));
     }
 
-    /**
-     * Verifies that invalid review fields throw an exception during Review construction.
-     */
+
+    @DisplayName("Verifies that invalid review fields throw an exception during Review construction.")
     @Test
     void saveReviews_throwsInvalidInputException_whenReviewFieldsInvalid() {
         // Act & Assert
@@ -164,9 +153,8 @@ class SqliteReviewRepositoryTest {
                 .build());
     }
 
-    /**
-     * Verifies that getReviewsPage returns paged results when data is present.
-     */
+
+    @DisplayName("Verifies that getReviewsPage returns paged results when data is present.")
     @Test
     void getReviewsPage_returnsPagedResults_whenDataPresent() {
         // Arrange
@@ -192,9 +180,8 @@ class SqliteReviewRepositoryTest {
         assertEquals("Review6", page.get(0).getReviewText());
     }
 
-    /**
-     * Verifies that getReviewsPage returns an empty list when there is no data.
-     */
+
+    @DisplayName("Verifies that getReviewsPage returns an empty list when there is no data.")
     @Test
     void getReviewsPage_returnsEmptyList_whenNoData() {
         // Act
@@ -204,9 +191,8 @@ class SqliteReviewRepositoryTest {
         assertTrue(page.isEmpty());
     }
 
-    /**
-     * Verifies that a SQL error in getReviewsPage throws a RuntimeException.
-     */
+
+    @DisplayName("Verifies that a SQL error in getReviewsPage throws a RuntimeException.")
     @Test
     void getReviewsPage_throwsRuntimeException_whenSqlErrorOccurs() {
         // Arrange
@@ -219,9 +205,8 @@ class SqliteReviewRepositoryTest {
         assertThrows(RuntimeException.class, () -> badRepo.getReviewsPage(1, 10));
     }
 
-    /**
-     * Verifies that getTotalReviewCount returns the correct count when data is present.
-     */
+
+    @DisplayName("Verifies that getTotalReviewCount returns the correct count when data is present.")
     @Test
     void getTotalReviewCount_returnsCorrectCount_whenDataPresent() {
         // Arrange
@@ -244,9 +229,8 @@ class SqliteReviewRepositoryTest {
         assertEquals(1, count);
     }
 
-    /**
-     * Verifies that getTotalReviewCount returns zero when there is no data.
-     */
+
+    @DisplayName("Verifies that getTotalReviewCount returns zero when there is no data.")
     @Test
     void getTotalReviewCount_returnsZero_whenNoData() {
         // Act
@@ -256,9 +240,8 @@ class SqliteReviewRepositoryTest {
         assertEquals(0, count);
     }
 
-    /**
-     * Verifies that a SQL error in getTotalReviewCount throws a RuntimeException.
-     */
+
+    @DisplayName("Verifies that a SQL error in getTotalReviewCount throws a RuntimeException.")
     @Test
     void getTotalReviewCount_throwsRuntimeException_whenSqlErrorOccurs() {
         // Arrange
@@ -271,9 +254,8 @@ class SqliteReviewRepositoryTest {
         assertThrows(RuntimeException.class, badRepo::getTotalReviewCount);
     }
 
-    /**
-     * Verifies that getReviewById returns the review if it exists, or null if not.
-     */
+
+    @DisplayName("Verifies that getReviewById returns the review if it exists, or null if not.")
     @Test
     void getReviewById_returnsReview_whenExistsOrNull_whenNotExists() {
         // Arrange
@@ -298,9 +280,8 @@ class SqliteReviewRepositoryTest {
         assertNull(notFound);
     }
 
-    /**
-     * Verifies that getReviewById returns null when the ID is null.
-     */
+
+    @DisplayName("Verifies that getReviewById returns null when the ID is null.")
     @Test
     void getReviewById_returnsNull_whenIdIsNull() {
         // Act
@@ -310,24 +291,20 @@ class SqliteReviewRepositoryTest {
         assertNull(result);
     }
 
-    /**
-     * Verifies that a SQL error in getReviewById throws a RuntimeException.
-     */
-    @Test
-    void getReviewById_throwsRuntimeException_whenSqlErrorOccurs() {
-        // Arrange
-        SqliteReviewRepository badRepo = new SqliteReviewRepository(DB_URL);
-        try (var conn = DriverManager.getConnection(DB_URL); var stmt = conn.createStatement()) {
-            stmt.execute("DROP TABLE reviews");
-        } catch (Exception ignored) {}
 
-        // Act & Assert
-        assertThrows(RuntimeException.class, () -> badRepo.getReviewById(1L));
+    @DisplayName("Verifies that a SQL error in getReviewById throws a RuntimeException (constructor or method).")
+    @Test
+    void getReviewById_forcesSQLException_throwsRuntimeException() {
+        RuntimeException ex = assertThrows(RuntimeException.class, () -> {
+            SqliteReviewRepository badRepo = new SqliteReviewRepository("jdbc:sqlite:/nonexistent/path/invalid.db");
+            badRepo.getReviewById(1L);
+        });
+        assertTrue(ex.getMessage().contains("Failed to create 'reviews' table") ||
+                   ex.getMessage().contains("SQL error fetching review by id"));
     }
 
-    /**
-     * Verifies that getReviewsByFilters returns filtered results when fields match.
-     */
+
+    @DisplayName("Verifies that getReviewsByFilters returns filtered results when fields match.")
     @Test
     void getReviewsByFilters_returnsFilteredResults_whenFieldsMatch() {
         // Arrange
@@ -365,18 +342,16 @@ class SqliteReviewRepositoryTest {
         assertEquals("Alpha", filtered.get(0).getReviewText());
     }
 
-    /**
-     * Verifies that passing null to getReviewsByFilters throws NullPointerException.
-     */
+
+    @DisplayName("Verifies that passing null to getReviewsByFilters throws NullPointerException.")
     @Test
     void getReviewsByFilters_throwsNullPointerException_whenFiltersNull() {
         // Act & Assert
         assertThrows(NullPointerException.class, () -> repository.getReviewsByFilters(null, 1, 10));
     }
 
-    /**
-     * Verifies that getReviewsByFilters returns an empty list when there is no data or no match.
-     */
+
+    @DisplayName("Verifies that getReviewsByFilters returns an empty list when there is no data or no match.")
     @Test
     void getReviewsByFilters_returnsEmptyList_whenNoDataOrNoMatch() {
         // Arrange
@@ -406,9 +381,8 @@ class SqliteReviewRepositoryTest {
         assertTrue(repository.getReviewsByFilters(noMatch, 1, 10).isEmpty());
     }
 
-    /**
-     * Verifies that a SQL error in getReviewsByFilters throws a RuntimeException.
-     */
+
+    @DisplayName("Verifies that a SQL error in getReviewsByFilters throws a RuntimeException.")
     @Test
     void getReviewsByFilters_throwsRuntimeException_whenSqlErrorOccurs() {
         // Arrange
@@ -422,9 +396,8 @@ class SqliteReviewRepositoryTest {
         assertThrows(RuntimeException.class, () -> badRepo.getReviewsByFilters(filters, 1, 10));
     }
 
-    /**
-     * Verifies that getFilteredReviewCount returns the correct count when filtered.
-     */
+
+    @DisplayName("Verifies that getFilteredReviewCount returns the correct count when filtered.")
     @Test
     void getFilteredReviewCount_returnsCorrectCount_whenFiltered() {
         // Arrange
@@ -458,18 +431,16 @@ class SqliteReviewRepositoryTest {
         assertEquals(1, count);
     }
 
-    /**
-     * Verifies that passing null to getFilteredReviewCount throws NullPointerException.
-     */
+
+    @DisplayName("Verifies that passing null to getFilteredReviewCount throws NullPointerException.")
     @Test
     void getFilteredReviewCount_throwsNullPointerException_whenFiltersNull() {
         // Act & Assert
         assertThrows(NullPointerException.class, () -> repository.getFilteredReviewCount(null));
     }
 
-    /**
-     * Verifies that getFilteredReviewCount returns zero when there is no data or no match.
-     */
+
+    @DisplayName("Verifies that getFilteredReviewCount returns zero when there is no data or no match.")
     @Test
     void getFilteredReviewCount_returnsZero_whenNoDataOrNoMatch() {
         // Arrange
@@ -496,25 +467,21 @@ class SqliteReviewRepositoryTest {
         assertEquals(0, repository.getFilteredReviewCount(noMatch));
     }
 
-    /**
-     * Verifies that a SQL error in getFilteredReviewCount throws a RuntimeException.
-     */
-    @Test
-    void getFilteredReviewCount_throwsRuntimeException_whenSqlErrorOccurs() {
-        // Arrange
-        SqliteReviewRepository badRepo = new SqliteReviewRepository(DB_URL);
-        try (var conn = DriverManager.getConnection(DB_URL); var stmt = conn.createStatement()) {
-            stmt.execute("DROP TABLE reviews");
-        } catch (Exception ignored) {}
-        Filters filters = new Filters.Builder().build();
 
-        // Act & Assert
-        assertThrows(RuntimeException.class, () -> badRepo.getFilteredReviewCount(filters));
+    @DisplayName("Verifies that a SQL error in getFilteredReviewCount throws a RuntimeException (constructor or method).")
+    @Test
+    void getFilteredReviewCount_forcesSQLException_throwsRuntimeException() {
+        RuntimeException ex = assertThrows(RuntimeException.class, () -> {
+            SqliteReviewRepository badRepo = new SqliteReviewRepository("jdbc:sqlite:/nonexistent/path/invalid.db");
+            Filters filters = new Filters.Builder().setReviewTitle("test").build();
+            badRepo.getFilteredReviewCount(filters);
+        });
+        assertTrue(ex.getMessage().contains("Failed to create 'reviews' table") ||
+                   ex.getMessage().contains("SQL error counting filtered reviews"));
     }
 
-    /**
-     * Verifies that getReviewsByKeywords returns results when keywords match review or title.
-     */
+
+    @DisplayName("Verifies that getReviewsByKeywords returns results when keywords match review or title.")
     @Test
     void getReviewsByKeywords_returnsResults_whenKeywordsMatchReviewOrTitle() {
         // Arrange
@@ -547,9 +514,8 @@ class SqliteReviewRepositoryTest {
         assertEquals(2, results.size());
     }
 
-    /**
-     * Verifies that getReviewsByKeywords returns an empty list when there are no keywords or keywords are empty.
-     */
+
+    @DisplayName("Verifies that getReviewsByKeywords returns an empty list when there are no keywords or keywords are empty.")
     @Test
     void getReviewsByKeywords_returnsEmptyList_whenNullOrEmptyKeywords() {
         // Act & Assert
@@ -557,9 +523,8 @@ class SqliteReviewRepositoryTest {
         assertTrue(repository.getReviewsByKeywords(Collections.emptyList()).isEmpty());
     }
 
-    /**
-     * Verifies that getReviewsByKeywords returns an empty list when there is no match.
-     */
+
+    @DisplayName("Verifies that getReviewsByKeywords returns an empty list when there is no match.")
     @Test
     void getReviewsByKeywords_returnsEmptyList_whenNoMatch() {
         // Arrange
@@ -579,9 +544,8 @@ class SqliteReviewRepositoryTest {
         assertTrue(repository.getReviewsByKeywords(List.of("ZZZ")).isEmpty());
     }
 
-    /**
-     * Verifies that a SQL error in getReviewsByKeywords throws a RuntimeException.
-     */
+
+    @DisplayName("Verifies that a SQL error in getReviewsByKeywords throws a RuntimeException.")
     @Test
     void getReviewsByKeywords_throwsRuntimeException_whenSqlErrorOccurs() {
         // Arrange
@@ -594,9 +558,8 @@ class SqliteReviewRepositoryTest {
         assertThrows(RuntimeException.class, () -> badRepo.getReviewsByKeywords(List.of("any")));
     }
 
-    /**
-     * Verifies that getAllReviews returns all reviews when data is present.
-     */
+
+    @DisplayName("Verifies that getAllReviews returns all reviews when data is present.")
     @Test
     void getAllReviews_returnsAllReviews_whenDataPresent() {
         // Arrange
@@ -629,9 +592,8 @@ class SqliteReviewRepositoryTest {
         assertEquals(2, all.size());
     }
 
-    /**
-     * Verifies that getAllReviews returns an empty list when there is no data.
-     */
+
+    @DisplayName("Verifies that getAllReviews returns an empty list when there is no data.")
     @Test
     void getAllReviews_returnsEmptyList_whenNoData() {
         // Act
@@ -641,24 +603,8 @@ class SqliteReviewRepositoryTest {
         assertTrue(all.isEmpty());
     }
 
-    /**
-     * Verifies that a SQL error in getAllReviews throws a RuntimeException.
-     */
-    @Test
-    void getAllReviews_throwsRuntimeException_whenSqlErrorOccurs() {
-        // Arrange
-        SqliteReviewRepository badRepo = new SqliteReviewRepository(DB_URL);
-        try (var conn = DriverManager.getConnection(DB_URL); var stmt = conn.createStatement()) {
-            stmt.execute("DROP TABLE reviews");
-        } catch (Exception ignored) {}
 
-        // Act & Assert
-        assertThrows(RuntimeException.class, badRepo::getAllReviews);
-    }
-
-    /**
-     * Verifies that getTotalReviewCountStats returns the same count as getTotalReviewCount.
-     */
+    @DisplayName("Verifies that getTotalReviewCountStats returns the same count as getTotalReviewCount.")
     @Test
     void getTotalReviewCountStats_returnsSameAsTotalCount() {
         // Arrange
@@ -682,9 +628,8 @@ class SqliteReviewRepositoryTest {
         assertEquals(total, stats);
     }
 
-    /**
-     * Verifies that a SQL error in getTotalReviewCountStats throws a RuntimeException.
-     */
+
+    @DisplayName("Verifies that a SQL error in getTotalReviewCountStats throws a RuntimeException.")
     @Test
     void getTotalReviewCountStats_throwsRuntimeException_whenSqlErrorOccurs() {
         // Arrange
@@ -697,9 +642,8 @@ class SqliteReviewRepositoryTest {
         assertThrows(RuntimeException.class, badRepo::getTotalReviewCountStats);
     }
 
-    /**
-     * Verifies that getAverageRating returns the correct average rating when data is present.
-     */
+
+    @DisplayName("Verifies that getAverageRating returns the correct average rating when data is present.")
     @Test
     void getAverageRating_returnsCorrectAverage_whenDataPresent() {
         // Arrange
@@ -732,9 +676,8 @@ class SqliteReviewRepositoryTest {
         assertEquals(3.0, avg, 0.01);
     }
 
-    /**
-     * Verifies that getAverageRating returns zero when there is no data.
-     */
+
+    @DisplayName("Verifies that getAverageRating returns zero when there is no data.")
     @Test
     void getAverageRating_returnsZero_whenNoData() {
         // Act
@@ -744,9 +687,8 @@ class SqliteReviewRepositoryTest {
         assertEquals(0.0, avg, 0.01);
     }
 
-    /**
-     * Verifies that a SQL error in getAverageRating throws a RuntimeException.
-     */
+
+    @DisplayName("Verifies that a SQL error in getAverageRating throws a RuntimeException.")
     @Test
     void getAverageRating_throwsRuntimeException_whenSqlErrorOccurs() {
         // Arrange
@@ -759,18 +701,16 @@ class SqliteReviewRepositoryTest {
         assertThrows(RuntimeException.class, badRepo::getAverageRating);
     }
 
-    /**
-     * Verifies that saveReviews does not throw an exception when an empty list is passed.
-     */
+
+    @DisplayName("Verifies that saveReviews does not throw an exception when an empty list is passed.")
     @Test
     void saveReviews_doesNotThrow_whenEmptyList() {
         // Act & Assert
         assertDoesNotThrow(() -> repository.saveReviews(Collections.emptyList()));
     }
 
-    /**
-     * Verifies that the repository is thread-safe when accessed concurrently.
-     */
+
+    @DisplayName("Verifies that the repository is thread-safe when accessed concurrently.")
     @Test
     void repository_isThreadSafe_whenAccessedConcurrently() throws InterruptedException {
         // Arrange
@@ -799,5 +739,75 @@ class SqliteReviewRepositoryTest {
 
         // Assert
         assertEquals(threadCount, repository.getTotalReviewCount());
+    }
+
+    @DisplayName("Verifies getReviewsByKeywords returns empty list for null or empty input.")
+    @Test
+    void getReviewsByKeywords_returnsEmptyList_forNullOrEmptyInput() {
+        assertTrue(repository.getReviewsByKeywords(null).isEmpty());
+        assertTrue(repository.getReviewsByKeywords(Collections.emptyList()).isEmpty());
+    }
+
+    @DisplayName("Verifies getReviewById returns null for null id and for missing id.")
+    @Test
+    void getReviewById_returnsNull_forNullOrMissingId() {
+        assertNull(repository.getReviewById(null));
+        assertNull(repository.getReviewById(99999L));
+    }
+
+    @DisplayName("Forces SQLException in getAllReviews and verifies RuntimeException is thrown (constructor or method).")
+    @Test
+    void getAllReviews_forcesSQLException_throwsRuntimeException() {
+        RuntimeException ex = assertThrows(RuntimeException.class, () -> {
+            SqliteReviewRepository badRepo = new SqliteReviewRepository("jdbc:sqlite:/nonexistent/path/invalid.db");
+            badRepo.getAllReviews();
+        });
+        assertTrue(ex.getMessage().contains("Failed to create 'reviews' table") ||
+                   ex.getMessage().contains("SQL error fetching all reviews"));
+    }
+
+    @DisplayName("Forces SQLException in getReviewsByKeywords and verifies RuntimeException is thrown (constructor or method).")
+    @Test
+    void getReviewsByKeywords_forcesSQLException_throwsRuntimeException() {
+        RuntimeException ex = assertThrows(RuntimeException.class, () -> {
+            SqliteReviewRepository badRepo = new SqliteReviewRepository("jdbc:sqlite:/nonexistent/path/invalid.db");
+            badRepo.getReviewsByKeywords(Arrays.asList("a"));
+        });
+        assertTrue(ex.getMessage().contains("Failed to create 'reviews' table") ||
+                   ex.getMessage().contains("SQL error searching reviews by keywords"));
+    }
+
+
+    @DisplayName("Forces SQLException in getReviewsPage and verifies RuntimeException is thrown (constructor or method).")
+    @Test
+    void getReviewsPage_forcesSQLException_throwsRuntimeException() {
+        RuntimeException ex = assertThrows(RuntimeException.class, () -> {
+            SqliteReviewRepository badRepo = new SqliteReviewRepository("jdbc:sqlite:/nonexistent/path/invalid.db");
+            badRepo.getReviewsPage(1, 5);
+        });
+        assertTrue(ex.getMessage().contains("Failed to create 'reviews' table") ||
+                   ex.getMessage().contains("SQL error loading paged reviews"));
+    }
+
+    @DisplayName("Verifies isNotBlank returns correct results for null, empty, and non-empty strings.")
+    @Test
+    void isNotBlank_variousInputs() throws Exception {
+        var method = SqliteReviewRepository.class.getDeclaredMethod("isNotBlank", String.class);
+        method.setAccessible(true);
+        assertFalse((Boolean) method.invoke(null, (String) null));
+        assertFalse((Boolean) method.invoke(null, ""));
+        assertTrue((Boolean) method.invoke(null, "abc"));
+    }
+
+    @DisplayName("Verifies parseFlexibleDate returns null for null/empty/invalid and parses valid date.")
+    @Test
+    void parseFlexibleDate_variousInputs() throws Exception {
+        var method = SqliteReviewRepository.class.getDeclaredMethod("parseFlexibleDate", String.class);
+        method.setAccessible(true);
+        assertNull(method.invoke(null, (String) null));
+        assertNull(method.invoke(null, ""));
+        assertNull(method.invoke(null, "notadate"));
+        assertNotNull(method.invoke(null, "2024-01-01"));
+        assertNotNull(method.invoke(null, "2024-01-01T12:00:00Z"));
     }
 }

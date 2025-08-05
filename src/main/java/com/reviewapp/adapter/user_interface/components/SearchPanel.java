@@ -184,6 +184,7 @@ public class SearchPanel extends JPanel {
             return;
         }
         for (Review r : reviews) {
+            if (r == null) continue;
             tableModel.addRow(new Object[]{
                     r.getReviewId(),
                     nvl(r.getReviewTitle()),

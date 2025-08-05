@@ -1,6 +1,7 @@
 package com.reviewapp.domain.model;
 
 import com.reviewapp.application.exception.InvalidInputException;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,9 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class StatisticsTest {
 
-    /**
-     * Tests that building with all fields sets all fields correctly.
-     */
+    @DisplayName("Tests that building with all fields sets all fields correctly")
     @Test
     void builder_buildWithAllFields_setsFieldsCorrectly() {
         // Arrange
@@ -37,9 +36,8 @@ class StatisticsTest {
         assertEquals(1, stats.getMonthlyRatingAverage().size());
     }
 
-    /**
-     * Tests that building with no fields sets defaults and empty collections.
-     */
+
+    @DisplayName("Tests that building with no fields sets defaults and empty collections")
     @Test
     void builder_buildWithNoFields_setsDefaultsAndEmptyCollections() {
         // Arrange
@@ -52,9 +50,8 @@ class StatisticsTest {
         assertTrue(stats.getMonthlyRatingAverage().isEmpty());
     }
 
-    /**
-     * Tests that building with different values results in distinct objects.
-     */
+
+    @DisplayName("Tests that building with different values results in distinct objects")
     @Test
     void builder_buildWithDifferentValues_resultsInDistinctObjects() {
         // Arrange
@@ -65,9 +62,8 @@ class StatisticsTest {
         assertNotEquals(stats1, stats2);
     }
 
-    /**
-     * Tests that setting negative totalReviews throws InvalidInputException.
-     */
+
+    @DisplayName("Tests that setting negative totalReviews throws InvalidInputException.")
     @Test
     void builder_setNegativeTotalReviews_throwsInvalidInputException() {
         // Arrange
@@ -75,9 +71,8 @@ class StatisticsTest {
         assertThrows(InvalidInputException.class, () -> new Statistics.Builder().setTotalReviews(-1).build());
     }
 
-    /**
-     * Tests that setting negative averageRating throws InvalidInputException.
-     */
+
+    @DisplayName("Tests that setting negative averageRating throws InvalidInputException.")
     @Test
     void builder_setNegativeAverageRating_throwsInvalidInputException() {
         // Arrange
@@ -85,9 +80,8 @@ class StatisticsTest {
         assertThrows(InvalidInputException.class, () -> new Statistics.Builder().setAverageRating(-1.0).build());
     }
 
-    /**
-     * Tests that Statistics is immutable and collections are unmodifiable and defensively copied.
-     */
+
+    @DisplayName("Tests that Statistics is immutable and collections are unmodifiable and defensively copied.")
     @Test
     void builder_immutabilityEnforced_collectionsAreUnmodifiableAndDefensiveCopied() {
         // Arrange
