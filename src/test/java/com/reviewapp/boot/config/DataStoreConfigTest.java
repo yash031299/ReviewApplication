@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.File;
+
 /**
  * Unit tests for {@link DataStoreConfig} covering configuration creation, type checking, and enum values.
  * Each test follows the Arrange-Act-Assert pattern and documents the scenario tested.
@@ -33,6 +35,9 @@ class DataStoreConfigTest {
         // Assert
         assertEquals(DataStoreConfig.DataStoreType.SQLITE_JDBC, config.getType());
         assertEquals("jdbc:sqlite:foo.db", config.getJdbcUrl());
+        // Cleanup: Delete foo.db after test
+        File file = new File("foo.db");
+        if (file.exists()) file.delete();
     }
 
 
