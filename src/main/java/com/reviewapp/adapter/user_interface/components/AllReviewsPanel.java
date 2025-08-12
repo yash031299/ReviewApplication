@@ -176,6 +176,7 @@ public class AllReviewsPanel extends JPanel {
             return;
         }
         for (Review r : reviews) {
+            if (r == null) continue;
             tableModel.addRow(new Object[]{
                     r.getReviewId(),
                     nullToEmpty(r.getReviewTitle()),

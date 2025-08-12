@@ -1,5 +1,6 @@
 package com.reviewapp.application.exception;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -12,9 +13,8 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class ValidationUtilsTest {
 
-    /**
-     * Tests parsing of ISO date format (yyyy-MM-dd).
-     */
+
+    @DisplayName("Tests parsing of ISO date format (yyyy-MM-dd).")
     @Test
     void parseDate_givenIsoFormat_returnsLocalDate() {
         // Arrange
@@ -25,9 +25,8 @@ class ValidationUtilsTest {
         assertEquals(LocalDate.of(2024, 7, 31), result);
     }
 
-    /**
-     * Tests parsing of slash date format (yyyy/MM/dd).
-     */
+
+    @DisplayName("Tests parsing of slash date format (yyyy/MM/dd).")
     @Test
     void parseDate_givenSlashFormat_returnsLocalDate() {
         // Arrange
@@ -38,9 +37,8 @@ class ValidationUtilsTest {
         assertEquals(LocalDate.of(2024, 7, 31), result);
     }
 
-    /**
-     * Tests parsing of US date format (MM/dd/yyyy).
-     */
+
+    @DisplayName("Tests parsing of US date format (MM/dd/yyyy).")
     @Test
     void parseDate_givenUsFormat_returnsLocalDate() {
         // Arrange
@@ -51,9 +49,8 @@ class ValidationUtilsTest {
         assertEquals(LocalDate.of(2024, 7, 31), result);
     }
 
-    /**
-     * Tests that null or empty date input throws InvalidInputException.
-     */
+
+    @DisplayName("Tests that null or empty date input throws InvalidInputException.")
     @Test
     void parseDate_givenNullOrEmpty_throwsInvalidInputException() {
         // Arrange, Act & Assert
@@ -62,9 +59,8 @@ class ValidationUtilsTest {
         assertThrows(InvalidInputException.class, () -> ValidationUtils.parseDate("   "));
     }
 
-    /**
-     * Tests that invalid or unsupported date formats throw InvalidInputException.
-     */
+
+    @DisplayName("Tests that invalid or unsupported date formats throw InvalidInputException.")
     @Test
     void parseDate_givenInvalidFormat_throwsInvalidInputException() {
         // Arrange, Act & Assert
@@ -73,9 +69,8 @@ class ValidationUtilsTest {
         assertThrows(InvalidInputException.class, () -> ValidationUtils.parseDate("31/07/2024")); // unsupported format
     }
 
-    /**
-     * Tests parsing of time in HH:mm format (should default seconds to zero).
-     */
+
+    @DisplayName("Tests parsing of time in HH:mm format (should default seconds to zero).")
     @Test
     void parseTime_givenHourMinute_returnsLocalTimeWithZeroSeconds() {
         // Arrange
@@ -86,9 +81,8 @@ class ValidationUtilsTest {
         assertEquals(LocalTime.of(14, 30, 0), result);
     }
 
-    /**
-     * Tests parsing of time in HH:mm:ss format.
-     */
+
+    @DisplayName("Tests parsing of time in HH:mm:ss format.")
     @Test
     void parseTime_givenHourMinuteSecond_returnsLocalTime() {
         // Arrange
@@ -99,9 +93,8 @@ class ValidationUtilsTest {
         assertEquals(LocalTime.of(14, 30, 15), result);
     }
 
-    /**
-     * Tests that null or empty time input throws InvalidInputException.
-     */
+
+    @DisplayName("Tests that null or empty time input throws InvalidInputException.")
     @Test
     void parseTime_givenNullOrEmpty_throwsInvalidInputException() {
         // Arrange, Act & Assert
@@ -110,9 +103,8 @@ class ValidationUtilsTest {
         assertThrows(InvalidInputException.class, () -> ValidationUtils.parseTime("   "));
     }
 
-    /**
-     * Tests that invalid or out-of-range time formats throw InvalidInputException.
-     */
+
+    @DisplayName("Tests that invalid or out-of-range time formats throw InvalidInputException.")
     @Test
     void parseTime_givenInvalidFormat_throwsInvalidInputException() {
         // Arrange, Act & Assert
@@ -122,9 +114,8 @@ class ValidationUtilsTest {
         assertThrows(InvalidInputException.class, () -> ValidationUtils.parseTime("12:30:60")); // invalid second
     }
 
-    /**
-     * Tests parsing of valid ratings (1-5), including whitespace.
-     */
+
+    @DisplayName("Tests parsing of valid ratings (1-5), including whitespace.")
     @Test
     void parseRating_givenValidRatings_returnsParsedInt() {
         // Arrange, Act & Assert
@@ -133,9 +124,8 @@ class ValidationUtilsTest {
         assertEquals(3, ValidationUtils.parseRating(" 3 "));
     }
 
-    /**
-     * Tests that null or empty rating input throws InvalidInputException.
-     */
+
+    @DisplayName("Tests that null or empty rating input throws InvalidInputException.")
     @Test
     void parseRating_givenNullOrEmpty_throwsInvalidInputException() {
         // Arrange, Act & Assert
@@ -144,9 +134,8 @@ class ValidationUtilsTest {
         assertThrows(InvalidInputException.class, () -> ValidationUtils.parseRating("   "));
     }
 
-    /**
-     * Tests that non-integer rating input throws InvalidInputException.
-     */
+
+    @DisplayName("Tests that non-integer rating input throws InvalidInputException.")
     @Test
     void parseRating_givenNonInteger_throwsInvalidInputException() {
         // Arrange, Act & Assert
@@ -155,9 +144,8 @@ class ValidationUtilsTest {
         assertThrows(InvalidInputException.class, () -> ValidationUtils.parseRating("one"));
     }
 
-    /**
-     * Tests that out-of-range ratings throw InvalidInputException.
-     */
+
+    @DisplayName("Tests that out-of-range ratings throw InvalidInputException.")
     @Test
     void parseRating_givenOutOfRange_throwsInvalidInputException() {
         // Arrange, Act & Assert

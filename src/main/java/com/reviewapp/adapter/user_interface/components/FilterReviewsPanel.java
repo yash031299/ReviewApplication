@@ -103,9 +103,6 @@ public class FilterReviewsPanel extends JPanel {
         add(new JScrollPane(table), BorderLayout.CENTER);
         add(detailsScroll, BorderLayout.SOUTH);
 
-        // Ensure at least one button is a direct child for test compatibility
-        this.add(applyFiltersButton);
-
         // Selection listener for details
         table.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
@@ -128,6 +125,45 @@ public class FilterReviewsPanel extends JPanel {
 
         // Initial state (no data); user applies filters to load
         updatePaginationControls();
+    }
+
+    @Override
+    public void addNotify() {
+        super.addNotify();
+        // Fix layout on display
+        SwingUtilities.invokeLater(this::fixApplyButtonLayout);
+    }
+
+    /**
+     * Ensures the Apply Filters button does not overlap filter fields/results.
+     * Moves the button below the filter grid in a separate row.
+     */
+    private void fixApplyButtonLayout() {
+        // Remove the button from any parent
+        Container parent = applyFiltersButton.getParent();
+        if (parent != null) {
+            parent.remove(applyFiltersButton);
+            parent.revalidate();
+            parent.repaint();
+        }
+        // Find the filters form panel (BorderLayout.NORTH)
+        Component filtersForm = getComponent(0);
+        if (filtersForm instanceof JPanel) {
+            JPanel container = (JPanel) filtersForm;
+            // Remove actions panel if present
+            for (Component c : container.getComponents()) {
+                if (c instanceof JPanel && ((JPanel) c).getComponentCount() == 1 && ((JPanel) c).getComponent(0) == applyFiltersButton) {
+                    container.remove(c);
+                    break;
+                }
+            }
+            // Add a new row for the button below the grid
+            JPanel southRow = new JPanel(new FlowLayout(FlowLayout.CENTER));
+            southRow.add(applyFiltersButton);
+            container.add(southRow, BorderLayout.SOUTH);
+            container.revalidate();
+            container.repaint();
+        }
     }
 
     // ------------------------------

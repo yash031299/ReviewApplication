@@ -1,5 +1,6 @@
 package com.reviewapp.domain.port;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -10,18 +11,16 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class ReviewWritePortTest {
 
-    /**
-     * Tests that ReviewWritePort is an interface.
-     */
+
+    @DisplayName("Verifies that ReviewWritePort is an interface")
     @Test
     void interfaceIsAccessible() {
         // Act & Assert
         assertTrue(ReviewWritePort.class.isInterface());
     }
 
-    /**
-     * Tests that all expected methods are declared and accessible on ReviewWritePort.
-     */
+
+    @DisplayName("All expected methods are declared and accessible on ReviewWritePort")
     @Test
     void allMethods_declaredAndAccessible() {
         // Arrange & Act & Assert

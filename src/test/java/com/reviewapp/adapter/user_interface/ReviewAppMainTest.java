@@ -2,6 +2,7 @@ package com.reviewapp.adapter.user_interface;
 
 import com.reviewapp.application.service.ReviewService;
 import com.reviewapp.application.service.StatisticsService;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -14,9 +15,8 @@ import static org.junit.jupiter.api.Assertions.*;
  * Each test follows the Arrange-Act-Assert pattern and documents the scenario tested.
  */
 class ReviewAppMainTest {
-    /**
-     * Tests that constructing ReviewAppMain with valid services does not throw.
-     */
+
+    @DisplayName("Tests that constructing ReviewAppMain with valid services does not throw")
     @Test
     void givenValidServices_whenMainConstructed_thenNoException() {
         // Arrange
@@ -26,9 +26,8 @@ class ReviewAppMainTest {
         assertDoesNotThrow(() -> new ReviewAppMain(mockReviewService, mockStatisticsService));
     }
 
-    /**
-     * Tests that the main window builds all expected tabs.
-     */
+
+    @DisplayName("Tests that the main window builds all expected tabs")
     @Test
     void givenMainWindow_whenBuildTabs_thenContainsAllTabs() throws Exception {
         // Arrange

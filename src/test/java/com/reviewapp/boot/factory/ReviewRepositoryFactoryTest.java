@@ -1,14 +1,18 @@
 package com.reviewapp.boot.factory;
 
 import com.reviewapp.boot.config.DataStoreConfig;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+
+import java.io.File;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 class ReviewRepositoryFactoryTest {
 
+    @DisplayName("Verifies that all ports are created and are the same instance")
     @Test
     void create_whenSqliteConfig_returnsBundleWithAllPortsSameInstance() {
         // Arrange
@@ -21,8 +25,12 @@ class ReviewRepositoryFactoryTest {
         assertNotNull(bundle.stats());
         assertSame(bundle.query(), bundle.write());
         assertSame(bundle.write(), bundle.stats());
+        // Cleanup: Delete foo.db after test
+        File dbFile = new File("foo.db");
+        if (dbFile.exists()) dbFile.delete();
     }
 
+    @DisplayName("Verifies that when in-memory config is used, then all ports are created and are the same instance")
     @Test
     void create_whenInMemoryConfig_returnsBundleWithAllPortsSameInstance() {
         // Arrange
@@ -37,6 +45,7 @@ class ReviewRepositoryFactoryTest {
         assertSame(bundle.write(), bundle.stats());
     }
 
+    @DisplayName("Verifies that when unsupported config type is used, then IllegalArgumentException is thrown")
     @Test
     void create_whenConfigTypeUnsupported_throwsIllegalArgumentException() {
         // Arrange

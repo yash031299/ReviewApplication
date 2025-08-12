@@ -125,6 +125,9 @@ public class SearchPanel extends JPanel {
                 String k = t.trim();
                 if (!k.isEmpty()) keywords.add(k);
             }
+            if (keywords.size() > MAX_KEYWORDS) {
+                throw new InvalidInputException("You entered too many keywords. The maximum allowed is " + MAX_KEYWORDS + ".");
+            }
         } catch (Exception ex) {
             AlertDialogs.warn(this, "Invalid Search", ex.getMessage());
             keywordField.requestFocusInWindow();
@@ -184,6 +187,7 @@ public class SearchPanel extends JPanel {
             return;
         }
         for (Review r : reviews) {
+            if (r == null) continue;
             tableModel.addRow(new Object[]{
                     r.getReviewId(),
                     nvl(r.getReviewTitle()),

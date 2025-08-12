@@ -46,9 +46,6 @@ public class StatisticsPanel extends JPanel {
         JScrollPane scroll = new JScrollPane(contentPanel);
         add(scroll, BorderLayout.CENTER);
 
-        // Ensure at least one button is a direct child for test compatibility
-        this.add(showStatsButton);
-
         // Wire actions
         showStatsButton.addActionListener(e -> loadAndRender(Section.STATS));
         distributionButton.addActionListener(e -> loadAndRender(Section.DISTRIBUTION));

@@ -1,5 +1,6 @@
 package com.reviewapp.application.exception;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -10,9 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class ResourceNotFoundExceptionTest {
 
-    /**
-     * Tests that the constructor sets the exception message correctly.
-     */
+    @DisplayName("Verifies that the constructor sets the exception message correctly.")
     @Test
     void constructor_setsMessage() {
         // Arrange
@@ -23,9 +22,8 @@ class ResourceNotFoundExceptionTest {
         assertEquals("Not found", ex.getMessage());
     }
 
-    /**
-     * Tests that the constructor sets both the message and cause correctly.
-     */
+
+    @DisplayName("Verifies that the constructor sets both the message and cause correctly.")
     @Test
     void constructor_withCause_setsMessageAndCause() {
         // Arrange
@@ -38,9 +36,8 @@ class ResourceNotFoundExceptionTest {
         assertSame(cause, ex.getCause());
     }
 
-    /**
-     * Tests that the exception is caught by assertThrows when thrown.
-     */
+
+    @DisplayName("Verifies that the exception is caught by assertThrows when thrown.")
     @Test
     void throwException_whenThrown_isCaughtByAssertThrows() {
         // Arrange, Act & Assert

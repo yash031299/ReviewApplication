@@ -3,6 +3,7 @@ package com.reviewapp.application.service;
 import com.reviewapp.domain.model.Statistics;
 import com.reviewapp.domain.port.ReviewStatsPort;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -29,9 +30,8 @@ class StatisticsServiceTest {
 
     private StatisticsService statisticsService;
 
-    /**
-     * Sets up the StatisticsService with mocked ReviewStatsPort before each test.
-     */
+
+    @DisplayName("Sets up the StatisticsService with mocked ReviewStatsPort before each test.")
     @BeforeEach
     void setUp() {
         // Arrange
@@ -42,9 +42,8 @@ class StatisticsServiceTest {
         statisticsService = new StatisticsService(reviewStatsPort);
     }
 
-    /**
-     * Tests that getReviewStatistics returns correct statistics for typical data.
-     */
+
+    @DisplayName("Verifies that getReviewStatistics returns correct statistics for typical data.")
     @Test
     void getReviewStatistics_shouldReturnComputedStatistics() {
         // Arrange
@@ -59,9 +58,8 @@ class StatisticsServiceTest {
         assertEquals(Map.of("2024-01", 4.5), statistics.getMonthlyRatingAverage());
     }
 
-    /**
-     * Tests that getReviewStatistics returns empty/zero statistics when there are no reviews.
-     */
+
+    @DisplayName("Verifies that getReviewStatistics returns empty/zero statistics when there are no reviews.")
     @Test
     void getReviewStatistics_whenNoReviews_shouldReturnEmptyStatistics() {
         // Arrange
@@ -80,9 +78,8 @@ class StatisticsServiceTest {
         assertEquals(Collections.emptyMap(), statistics.getMonthlyRatingAverage());
     }
 
-    /**
-     * Tests that getReviewStatistics handles large numbers correctly.
-     */
+
+    @DisplayName("Verifies that getReviewStatistics handles large numbers correctly.")
     @Test
     void getReviewStatistics_withLargeNumbers_shouldReturnCorrectStatistics() {
         // Arrange
@@ -101,9 +98,8 @@ class StatisticsServiceTest {
         assertEquals(Map.of("2099-12", 5.0), statistics.getMonthlyRatingAverage());
     }
 
-    /**
-     * Tests that getReviewStatistics throws InvalidInputException for negative/invalid values.
-     */
+
+    @DisplayName("Verifies that getReviewStatistics throws InvalidInputException for negative/invalid values.")
     @Test
     void getReviewStatistics_withNegativeAndInvalidValues_shouldHandleOrThrow() {
         // Arrange
@@ -115,9 +111,8 @@ class StatisticsServiceTest {
         assertThrows(com.reviewapp.application.exception.InvalidInputException.class, () -> new StatisticsService(reviewStatsPort).getReviewStatistics());
     }
 
-    /**
-     * Tests that getReviewStatistics returns empty maps if port returns null maps.
-     */
+
+    @DisplayName("Verifies that getReviewStatistics returns empty maps if port returns null maps.")
     @Test
     void getReviewStatistics_withNullMaps_shouldReturnEmptyMaps() {
         // Arrange
@@ -136,9 +131,8 @@ class StatisticsServiceTest {
         assertEquals(Collections.emptyMap(), statistics.getMonthlyRatingAverage());
     }
 
-    /**
-     * Tests that getReviewStatistics covers full rating range and missing values.
-     */
+
+    @DisplayName("Verifies that getReviewStatistics covers full rating range and missing values.")
     @Test
     void getReviewStatistics_withFullRatingRangeAndMissingValues() {
         // Arrange
@@ -157,9 +151,8 @@ class StatisticsServiceTest {
         assertEquals(Map.of("2025-01", 3.0), statistics.getMonthlyRatingAverage());
     }
 
-    /**
-     * Tests that getReviewStatistics propagates exceptions from the port.
-     */
+
+    @DisplayName("Verifies that getReviewStatistics propagates exceptions from the port.")
     @Test
     void getReviewStatistics_whenPortThrows_shouldPropagateException() {
         // Arrange
@@ -168,9 +161,8 @@ class StatisticsServiceTest {
         assertThrows(RuntimeException.class, () -> new StatisticsService(reviewStatsPort));
     }
 
-    /**
-     * Tests that the statistics snapshot is immutable even if the port changes after construction.
-     */
+
+    @DisplayName("Verifies that getReviewStatistics returns an immutable snapshot.")
     @Test
     void getReviewStatistics_snapshotShouldBeImmutableEvenIfPortChanges() {
         // Arrange

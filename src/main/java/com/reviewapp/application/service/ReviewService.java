@@ -25,7 +25,7 @@ public class ReviewService {
      * Constructs a service backed by the given ports.
      *
      * @param queryPort read/query port (required)
-     * @param writePort write port (may be null if you don't need writes)
+     * @param writePort write port (maybe null if you don't need writes)
      */
     public ReviewService(ReviewQueryPort queryPort, ReviewWritePort writePort) {
         this.queryPort = Objects.requireNonNull(queryPort, "queryPort must not be null");

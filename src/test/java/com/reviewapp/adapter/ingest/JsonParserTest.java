@@ -4,6 +4,7 @@ import com.reviewapp.domain.model.Review;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -24,29 +25,25 @@ class JsonParserTest {
     @TempDir
     Path tempDir;
 
-    /**
-     * Sets up the test fixture before each test.
-     * Redirects System.err to capture warnings for assertions.
-     */
+
+    @DisplayName("Sets up the test fixture before each test. " +
+            "Redirects System.err to capture warnings for assertions.")
     @BeforeEach
     void setUp() {
-        // Redirect System.err to capture warnings
         errStream = new ByteArrayOutputStream();
         originalErr = System.err;
         System.setErr(new PrintStream(errStream));
     }
 
-    /**
-     * Restores System.err after each test to avoid side effects.
-     */
+
+    @DisplayName("Restores System.err after each test to avoid side effects.")
     @AfterEach
     void restoreSystemErr() {
         System.setErr(originalErr);
     }
 
-    /**
-     * Verifies that a valid JSON file with multiple reviews is parsed correctly.
-     */
+
+    @DisplayName("Verifies that a valid JSON file with multiple reviews is parsed correctly.")
     @Test
     void parseReviewsFromFile_validJsonFile_parsesReviews() throws IOException {
         // Arrange
@@ -76,9 +73,8 @@ class JsonParserTest {
         assertEquals(3, review2.getProductRating());
     }
 
-    /**
-     * Verifies that invalid lines (malformed JSON) are skipped and a warning is printed.
-     */
+
+    @DisplayName("Verifies that invalid lines (malformed JSON) are skipped and a warning is printed.")
     @Test
     void parseReviewsFromFile_invalidLines_skipsInvalidLines() throws IOException {
         // Arrange
@@ -99,9 +95,8 @@ class JsonParserTest {
         assertTrue(errOutput.contains("Skipping bad JSON at line 2"));
     }
 
-    /**
-     * Verifies that an empty JSON file returns an empty list.
-     */
+
+    @DisplayName("Verifies that an empty JSON file returns an empty list.")
     @Test
     void parseReviewsFromFile_emptyJsonFile_returnsEmptyList() throws IOException {
         // Arrange
@@ -115,9 +110,8 @@ class JsonParserTest {
         assertTrue(reviews.isEmpty());
     }
 
-    /**
-     * Verifies that a missing file throws a RuntimeException.
-     */
+
+    @DisplayName("Verifies that a missing file throws a RuntimeException.")
     @Test
     void parseReviewsFromFile_fileNotFound_throwsRuntimeException() {
         // Act & Assert
@@ -125,9 +119,8 @@ class JsonParserTest {
                 "Expected RuntimeException for non-existent file");
     }
 
-    /**
-     * Verifies that missing optional fields in JSON result in null fields in Review.
-     */
+
+    @DisplayName("Verifies that missing optional fields in JSON result in null fields in Review.")
     @Test
     void parseReviewsFromFile_missingOptionalFields_parsesReviewWithNulls() throws IOException {
         // Arrange
@@ -151,9 +144,8 @@ class JsonParserTest {
         assertEquals(5, review.getProductRating());
     }
 
-    /**
-     * Verifies that a review with an invalid rating is skipped and an error is printed.
-     */
+
+    @DisplayName("Verifies that a review with an invalid rating is skipped and an error is printed.")
     @Test
     void parseReviewsFromFile_invalidRating_printsErrorAndSkipsReview() throws IOException {
         // Arrange
@@ -170,9 +162,8 @@ class JsonParserTest {
         assertTrue(errOutput.contains("Invalid rating; must be between 1 and 5"));
     }
 
-    /**
-     * Verifies that a missing ID in JSON results in a generated positive ID.
-     */
+
+    @DisplayName("Verifies that a missing ID in JSON results in a generated positive ID.")
     @Test
     void parseReviewsFromFile_missingId_generatesRandomId() throws IOException {
         // Arrange
@@ -191,9 +182,8 @@ class JsonParserTest {
         assertEquals(LocalDate.of(2023, 1, 1), review.getReviewedDate());
     }
 
-    /**
-     * Verifies that a realistic mock Alexa JSON file is parsed with all reviews loaded.
-     */
+
+    @DisplayName("Verifies that a realistic mock Alexa JSON file is parsed with all reviews loaded.")
     @Test
     void parseReviewsFromFile_mockAlexaJsonFile_parsesAllReviews() throws IOException {
         // Arrange
@@ -209,5 +199,71 @@ class JsonParserTest {
         assertEquals("Amazon", firstReview.getReviewSource());
         assertEquals("Great buy", firstReview.getReviewTitle());
         assertEquals("Echo Dot", firstReview.getProductName());
+    }
+
+    @DisplayName("parseFlexibleDate: null, empty, short, and malformed date strings return null")
+    @Test
+    void parseFlexibleDate_edgeCases() throws Exception {
+        var method = JsonParser.class.getDeclaredMethod("parseFlexibleDate", String.class);
+        method.setAccessible(true);
+        assertNull(method.invoke(null, (String) null));
+        assertNull(method.invoke(null, ""));
+        assertNull(method.invoke(null, "2023-01")); // too short
+        assertNull(method.invoke(null, "not-a-date")); // malformed
+        assertEquals(java.time.LocalDate.of(2023,1,1), method.invoke(null, "2023-01-01"));
+        assertEquals(java.time.LocalDate.of(2023,1,1), method.invoke(null, "2023-01-01T12:00:00Z"));
+    }
+
+    @DisplayName("Parses a JSON array file (not NDJSON)")
+    @Test
+    void parseReviewsFromFile_jsonArrayFile() throws Exception {
+        Path tempFile = tempDir.resolve("array.json");
+        String json = "[" +
+                "{\"id\":1,\"rating\":5,\"reviewed_date\":\"2023-01-01\"}," +
+                "{\"id\":2,\"rating\":4,\"reviewed_date\":\"2023-02-01\"}]";
+        Files.writeString(tempFile, json);
+        List<Review> reviews = JsonParser.parseReviewsFromFile(tempFile.toString());
+        assertEquals(2, reviews.size());
+        assertEquals(1L, reviews.get(0).getReviewId());
+        assertEquals(2L, reviews.get(1).getReviewId());
+    }
+
+    @DisplayName("Skips bad JSON element in array and prints warning")
+    @Test
+    void parseReviewsFromFile_jsonArrayWithBadElement_warnsAndSkips() throws Exception {
+        Path tempFile = tempDir.resolve("array_bad.json");
+        String json = "[" +
+                "{\"id\":1,\"rating\":5,\"reviewed_date\":\"2023-01-01\"}," +
+                "{\"rating\":6,\"reviewed_date\":\"2023-01-01\"}]"; // Invalid rating
+        Files.writeString(tempFile, json);
+        List<Review> reviews = JsonParser.parseReviewsFromFile(tempFile.toString());
+        assertEquals(1, reviews.size());
+        String errOutput = errStream.toString();
+        assertTrue(errOutput.contains("Skipping bad JSON array element"));
+    }
+
+    @DisplayName("Skips empty lines in NDJSON file")
+    @Test
+    void parseReviewsFromFile_skipsEmptyLines() throws Exception {
+        Path tempFile = tempDir.resolve("empty_lines.json");
+        String json = "{\"id\":1,\"rating\":5,\"reviewed_date\":\"2023-01-01\"}\n\n\n{\"id\":2,\"rating\":4,\"reviewed_date\":\"2023-02-01\"}";
+        Files.writeString(tempFile, json);
+        List<Review> reviews = JsonParser.parseReviewsFromFile(tempFile.toString());
+        assertEquals(2, reviews.size());
+    }
+
+    @DisplayName("JsonParser constructor throws AssertionError on instantiation")
+    @Test
+    void constructor_throwsAssertionError() throws Exception {
+        var constructor = JsonParser.class.getDeclaredConstructor();
+        constructor.setAccessible(true);
+        try {
+            constructor.newInstance();
+            fail("Expected AssertionError");
+        } catch (java.lang.reflect.InvocationTargetException e) {
+            Throwable cause = e.getCause();
+            assertTrue(cause instanceof AssertionError);
+            assertEquals("Do not instantiate utility class JsonParser", cause.getMessage());
+        }
     }
 }

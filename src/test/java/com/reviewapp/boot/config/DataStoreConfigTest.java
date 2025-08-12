@@ -1,30 +1,31 @@
 package com.reviewapp.boot.config;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.io.File;
 
 /**
  * Unit tests for {@link DataStoreConfig} covering configuration creation, type checking, and enum values.
  * Each test follows the Arrange-Act-Assert pattern and documents the scenario tested.
  */
 class DataStoreConfigTest {
-    /**
-     * Tests that the DataStoreConfig constructor is private and cannot be accessed via reflection.
-     */
+
+    @DisplayName("Tests that the DataStoreConfig constructor is private and cannot be accessed via reflection.")
     @Test
     void constructor_whenAccessedViaReflection_isPrivate() throws Exception {
         // Arrange
-        var ctor = DataStoreConfig.class.getDeclaredConstructor();
+        var constructor = DataStoreConfig.class.getDeclaredConstructor();
         // Act
-        ctor.setAccessible(true);
+        constructor.setAccessible(true);
         // Assert
-        assertThrows(Exception.class, ctor::newInstance);
+        assertThrows(Exception.class, constructor::newInstance);
     }
 
-    /**
-     * Tests that sqlite() creates a config with the correct JDBC URL.
-     */
+
+    @DisplayName("Tests that sqlite() creates a config with the correct JDBC URL.")
     @Test
     void sqlite_whenGivenFileName_createsJdbcConfigWithCorrectUrl() {
         // Arrange
@@ -34,11 +35,13 @@ class DataStoreConfigTest {
         // Assert
         assertEquals(DataStoreConfig.DataStoreType.SQLITE_JDBC, config.getType());
         assertEquals("jdbc:sqlite:foo.db", config.getJdbcUrl());
+        // Cleanup: Delete foo.db after test
+        File file = new File("foo.db");
+        if (file.exists()) file.delete();
     }
 
-    /**
-     * Tests that inMemory() creates a config with type IN_MEMORY and null JDBC URL.
-     */
+
+    @DisplayName("Tests that inMemory() creates a config with type IN_MEMORY and null JDBC URL.")
     @Test
     void inMemory_whenCalled_createsInMemoryConfigWithNullJdbcUrl() {
         // Arrange
@@ -49,9 +52,8 @@ class DataStoreConfigTest {
         assertNull(config.getJdbcUrl());
     }
 
-    /**
-     * Tests that sqlite() returns distinct config instances for the same file name.
-     */
+
+    @DisplayName("Tests that sqlite() returns distinct config instances for the same file name.")
     @Test
     void sqlite_whenCalledTwiceWithSameFileName_returnsDistinctConfigs() {
         // Arrange
@@ -63,9 +65,8 @@ class DataStoreConfigTest {
         assertEquals(c1.getJdbcUrl(), c2.getJdbcUrl());
     }
 
-    /**
-     * Tests that inMemory() config's JDBC URL is null.
-     */
+
+    @DisplayName("Tests that inMemory() returns a config with null JDBC URL.")
     @Test
     void inMemory_whenCalled_getJdbcUrlReturnsNull() {
         // Arrange
@@ -75,9 +76,8 @@ class DataStoreConfigTest {
         assertNull(jdbcUrl);
     }
 
-    /**
-     * Tests that getType() on a SQLite config returns SQLITE_JDBC.
-     */
+
+    @DisplayName("Tests that getType() on a SQLite config returns SQLITE_JDBC.")
     @Test
     void getType_whenCalledOnSqliteConfig_returnsSqliteJdbc() {
         // Arrange
@@ -88,9 +88,8 @@ class DataStoreConfigTest {
         assertEquals(DataStoreConfig.DataStoreType.SQLITE_JDBC, type);
     }
 
-    /**
-     * Tests that getType() on an in-memory config returns IN_MEMORY.
-     */
+
+    @DisplayName("Tests that getType() on an in-memory config returns IN_MEMORY.")
     @Test
     void getType_whenCalledOnInMemoryConfig_returnsInMemory() {
         // Arrange
@@ -101,9 +100,8 @@ class DataStoreConfigTest {
         assertEquals(DataStoreConfig.DataStoreType.IN_MEMORY, type);
     }
 
-    /**
-     * Tests that the DataStoreType enum contains SQLITE_JDBC and IN_MEMORY.
-     */
+
+    @DisplayName("Tests that the DataStoreType enum contains SQLITE_JDBC and IN_MEMORY.")
     @Test
     void enumValues_shouldContainSqliteJdbcAndInMemory() {
         // Arrange
