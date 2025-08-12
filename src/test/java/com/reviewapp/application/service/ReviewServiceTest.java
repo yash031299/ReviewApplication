@@ -114,6 +114,20 @@ class ReviewServiceTest {
                 () -> reviewService.getReviewsByKeywords(List.of("   ")));
     }
 
+    @DisplayName("Verifies that getReviewsByKeywords throws if keywords is null.")
+    @Test
+    void getReviewsByKeywords_givenNullKeywords_throwsException() {
+        assertThrows(com.reviewapp.application.exception.InvalidInputException.class,
+                () -> reviewService.getReviewsByKeywords(null));
+    }
+
+    @DisplayName("Verifies that getReviewsByKeywords throws if keywords is an empty list.")
+    @Test
+    void getReviewsByKeywords_givenEmptyKeywords_throwsException() {
+        assertThrows(com.reviewapp.application.exception.InvalidInputException.class,
+                () -> reviewService.getReviewsByKeywords(List.of()));
+    }
+
     // --- getFilteredReviewsPage ---
 
 
@@ -131,9 +145,8 @@ class ReviewServiceTest {
         verify(queryPort).getReviewsByFilters(filters, 1, 10);
     }
 
-    /**
-     * Tests that getFilteredReviewsPage returns reviews for rating and verified filters.
-     */
+
+    @DisplayName("Verifies that getFilteredReviewsPage returns reviews for rating and verified filters.")
     @Test
     void getFilteredReviewsPage_givenRating5AndVerifiedFilter_returnsExpectedReviews() throws IOException {
         // Arrange
@@ -270,6 +283,30 @@ class ReviewServiceTest {
         // Assert
         assertEquals(expected, actual);
         verify(queryPort).getReviewsByFilters(filters, 1, 10);
+    }
+
+
+    @DisplayName("Verifies that getFilteredReviewsPage throws if filters is null.")
+    @Test
+    void getFilteredReviewsPage_givenNullFilters_throwsException() {
+        assertThrows(com.reviewapp.application.exception.InvalidInputException.class,
+                () -> reviewService.getFilteredReviewsPage(null, 1, 10));
+    }
+
+    @DisplayName("Verifies that getFilteredReviewsPage throws if page is non-positive.")
+    @Test
+    void getFilteredReviewsPage_givenInvalidPage_throwsException() {
+        Filters filters = new Filters.Builder().setMinRating(1).build();
+        assertThrows(com.reviewapp.application.exception.InvalidInputException.class,
+                () -> reviewService.getFilteredReviewsPage(filters, 0, 10));
+    }
+
+    @DisplayName("Verifies that getFilteredReviewsPage throws if pageSize is non-positive.")
+    @Test
+    void getFilteredReviewsPage_givenInvalidPageSize_throwsException() {
+        Filters filters = new Filters.Builder().setMinRating(1).build();
+        assertThrows(com.reviewapp.application.exception.InvalidInputException.class,
+                () -> reviewService.getFilteredReviewsPage(filters, 1, 0));
     }
 
 

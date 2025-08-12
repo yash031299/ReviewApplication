@@ -479,7 +479,7 @@ public class SqliteReviewRepository implements ReviewQueryPort, ReviewWritePort,
      * Simple "not blank" check used when building WHERE clauses.
      */
     private static boolean isNotBlank(String text) {
-        return text != null && !text.isEmpty();
+        return text != null && !text.trim().isEmpty();
     }
 
     /**

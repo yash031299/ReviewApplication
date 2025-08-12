@@ -30,7 +30,6 @@ class JsonParserTest {
             "Redirects System.err to capture warnings for assertions.")
     @BeforeEach
     void setUp() {
-        // Redirect System.err to capture warnings
         errStream = new ByteArrayOutputStream();
         originalErr = System.err;
         System.setErr(new PrintStream(errStream));
@@ -200,5 +199,71 @@ class JsonParserTest {
         assertEquals("Amazon", firstReview.getReviewSource());
         assertEquals("Great buy", firstReview.getReviewTitle());
         assertEquals("Echo Dot", firstReview.getProductName());
+    }
+
+    @DisplayName("parseFlexibleDate: null, empty, short, and malformed date strings return null")
+    @Test
+    void parseFlexibleDate_edgeCases() throws Exception {
+        var method = JsonParser.class.getDeclaredMethod("parseFlexibleDate", String.class);
+        method.setAccessible(true);
+        assertNull(method.invoke(null, (String) null));
+        assertNull(method.invoke(null, ""));
+        assertNull(method.invoke(null, "2023-01")); // too short
+        assertNull(method.invoke(null, "not-a-date")); // malformed
+        assertEquals(java.time.LocalDate.of(2023,1,1), method.invoke(null, "2023-01-01"));
+        assertEquals(java.time.LocalDate.of(2023,1,1), method.invoke(null, "2023-01-01T12:00:00Z"));
+    }
+
+    @DisplayName("Parses a JSON array file (not NDJSON)")
+    @Test
+    void parseReviewsFromFile_jsonArrayFile() throws Exception {
+        Path tempFile = tempDir.resolve("array.json");
+        String json = "[" +
+                "{\"id\":1,\"rating\":5,\"reviewed_date\":\"2023-01-01\"}," +
+                "{\"id\":2,\"rating\":4,\"reviewed_date\":\"2023-02-01\"}]";
+        Files.writeString(tempFile, json);
+        List<Review> reviews = JsonParser.parseReviewsFromFile(tempFile.toString());
+        assertEquals(2, reviews.size());
+        assertEquals(1L, reviews.get(0).getReviewId());
+        assertEquals(2L, reviews.get(1).getReviewId());
+    }
+
+    @DisplayName("Skips bad JSON element in array and prints warning")
+    @Test
+    void parseReviewsFromFile_jsonArrayWithBadElement_warnsAndSkips() throws Exception {
+        Path tempFile = tempDir.resolve("array_bad.json");
+        String json = "[" +
+                "{\"id\":1,\"rating\":5,\"reviewed_date\":\"2023-01-01\"}," +
+                "{\"rating\":6,\"reviewed_date\":\"2023-01-01\"}]"; // Invalid rating
+        Files.writeString(tempFile, json);
+        List<Review> reviews = JsonParser.parseReviewsFromFile(tempFile.toString());
+        assertEquals(1, reviews.size());
+        String errOutput = errStream.toString();
+        assertTrue(errOutput.contains("Skipping bad JSON array element"));
+    }
+
+    @DisplayName("Skips empty lines in NDJSON file")
+    @Test
+    void parseReviewsFromFile_skipsEmptyLines() throws Exception {
+        Path tempFile = tempDir.resolve("empty_lines.json");
+        String json = "{\"id\":1,\"rating\":5,\"reviewed_date\":\"2023-01-01\"}\n\n\n{\"id\":2,\"rating\":4,\"reviewed_date\":\"2023-02-01\"}";
+        Files.writeString(tempFile, json);
+        List<Review> reviews = JsonParser.parseReviewsFromFile(tempFile.toString());
+        assertEquals(2, reviews.size());
+    }
+
+    @DisplayName("JsonParser constructor throws AssertionError on instantiation")
+    @Test
+    void constructor_throwsAssertionError() throws Exception {
+        var constructor = JsonParser.class.getDeclaredConstructor();
+        constructor.setAccessible(true);
+        try {
+            constructor.newInstance();
+            fail("Expected AssertionError");
+        } catch (java.lang.reflect.InvocationTargetException e) {
+            Throwable cause = e.getCause();
+            assertTrue(cause instanceof AssertionError);
+            assertEquals("Do not instantiate utility class JsonParser", cause.getMessage());
+        }
     }
 }

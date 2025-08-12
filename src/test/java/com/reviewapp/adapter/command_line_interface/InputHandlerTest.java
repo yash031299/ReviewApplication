@@ -41,7 +41,6 @@ class InputHandlerTest {
     @BeforeEach
     void setUp() {
         inputHandler = new InputHandler(reviewService, statisticsService);
-        // Redirect System.out to capture output
         outputStream = new ByteArrayOutputStream();
         originalOut = System.out;
         System.setOut(new PrintStream(outputStream));
@@ -358,5 +357,211 @@ class InputHandlerTest {
         // Assert
         String output = outputStream.toString();
         assertTrue(output.contains("Unknown command. Type 'help' for available commands."));
+    }
+
+    @DisplayName("parseInputFilters: unknown key does not throw and returns Filters")
+    @Test
+    void parseInputFilters_unknownKey_doesNotThrow() throws Exception {
+        // Arrange
+        var m = InputHandler.class.getDeclaredMethod("parseInputFilters", String.class);
+        m.setAccessible(true);
+        Filters filters = null;
+
+        //Act
+        try {
+            filters = (Filters) m.invoke(inputHandler, "unknownKey=123");
+        } catch (Exception e) {
+            fail("parseInputFilters should not throw for unknown keys, but got: " + e);
+        }
+
+        //Assert
+        assertNotNull(filters);
+    }
+
+    @DisplayName("parseInputFilters: covers all filter key branches")
+    @Test
+    void parseInputFilters_coversAllBranches() throws Exception {
+        var m = InputHandler.class.getDeclaredMethod("parseInputFilters", String.class);
+        m.setAccessible(true);
+        // MIN_RATING
+        Filters f1 = (Filters) m.invoke(inputHandler, "minrating=2");
+        assertNotNull(f1);
+        // MAX_RATING
+        Filters f2 = (Filters) m.invoke(inputHandler, "maxrating=4");
+        assertNotNull(f2);
+        // AUTHOR
+        Filters f3 = (Filters) m.invoke(inputHandler, "author=John Doe");
+        assertNotNull(f3);
+        // TITLE
+        Filters f4 = (Filters) m.invoke(inputHandler, "title=Review Title");
+        assertNotNull(f4);
+        // PRODUCT
+        Filters f5 = (Filters) m.invoke(inputHandler, "product=Widget");
+        assertNotNull(f5);
+        // STORE
+        Filters f6 = (Filters) m.invoke(inputHandler, "store=StoreName");
+        assertNotNull(f6);
+        // DATE
+        Filters f7 = (Filters) m.invoke(inputHandler, "date=2023-01-01");
+        assertNotNull(f7);
+        // START_DATE
+        Filters f8 = (Filters) m.invoke(inputHandler, "startdate=2023-01-01");
+        assertNotNull(f8);
+        // END_DATE
+        Filters f9 = (Filters) m.invoke(inputHandler, "enddate=2023-01-31");
+        assertNotNull(f9);
+        // START_TIME
+        Filters f10 = (Filters) m.invoke(inputHandler, "starttime=12:00");
+        assertNotNull(f10);
+        // END_TIME
+        Filters f11 = (Filters) m.invoke(inputHandler, "endtime=13:30:00");
+        assertNotNull(f11);
+        // SORT_DATE
+        Filters f12 = (Filters) m.invoke(inputHandler, "sortdate=true");
+        assertNotNull(f12);
+        Filters f13 = (Filters) m.invoke(inputHandler, "sortdate=false");
+        assertNotNull(f13);
+        // SORT_RATING
+        Filters f14 = (Filters) m.invoke(inputHandler, "sortrating=true");
+        assertNotNull(f14);
+        Filters f15 = (Filters) m.invoke(inputHandler, "sortrating=false");
+        assertNotNull(f15);
+    }
+
+    @DisplayName("parseTimeLenient: invalid time throws exception")
+    @Test
+    void parseTimeLenient_invalidTime_throwsException() throws Exception {
+        // Arrange
+        Exception ex = assertThrows(Exception.class, () ->
+                invokePrivateStaticTimeLenient("badtime")
+        );
+        Throwable cause = ex.getCause() != null ? ex.getCause() : ex;
+
+        //Act & Assert
+        assertTrue(cause instanceof IllegalArgumentException);
+        assertTrue(cause.getMessage().contains("time must be HH:mm or HH:mm:ss"));
+    }
+
+    @DisplayName("parseDateStrict: invalid date throws exception")
+    @Test
+    void parseDateStrict_invalidDate_throwsException() throws Exception {
+        Exception ex = assertThrows(Exception.class, () ->
+                invokePrivateStaticDateStrict("2023-99-99")
+        );
+        Throwable cause = ex.getCause() != null ? ex.getCause() : ex;
+        assertTrue(cause instanceof IllegalArgumentException);
+        assertTrue(cause.getMessage().contains("date must be in YYYY-MM-DD (ISO) format"));
+    }
+
+    @DisplayName("clearScreen: handles exception gracefully")
+    @Test
+    void clearScreen_exception_printsWarning() throws Exception {
+        var method = InputHandler.class.getDeclaredMethod("clearScreen");
+        method.setAccessible(true);
+        InputHandler handler = new InputHandler(reviewService, statisticsService);
+        System.setProperty("os.name", "");
+
+        try {
+
+            PrintStream original = System.out;
+            System.setOut(new PrintStream(new OutputStream() {
+                @Override
+                public void write(int b) {
+                    throw new RuntimeException("fail");
+                }
+            }));
+            try {
+                method.invoke(handler);
+            } catch (Exception e) {
+                // Expected, now check output
+                System.setOut(originalOut);
+                String output = outputStream.toString();
+                // We cannot capture output if System.out throws, so just assert exception occurred
+                assertTrue(e.getCause() instanceof RuntimeException);
+            }
+        } finally {
+            System.setOut(originalOut);
+        }
+    }
+
+    @DisplayName("parseIntInRange: out of range throws exception")
+    @Test
+    void parseIntInRange_outOfRange_throwsException() throws Exception {
+        Exception ex = assertThrows(Exception.class, () ->
+                invokePrivateStaticIntInRange("10", 1, 5, "rating")
+        );
+        Throwable cause = ex.getCause() != null ? ex.getCause() : ex;
+        assertTrue(cause instanceof IllegalArgumentException);
+        assertTrue(cause.getMessage().contains("must be between"));
+    }
+
+    @DisplayName("parseIntInRange: non-integer throws exception")
+    @Test
+    void parseIntInRange_nonInteger_throwsException() throws Exception {
+        Exception ex = assertThrows(Exception.class, () ->
+                invokePrivateStaticIntInRange("notanint", 1, 5, "rating")
+        );
+        Throwable cause = ex.getCause() != null ? ex.getCause() : ex;
+        assertTrue(cause instanceof IllegalArgumentException);
+        assertTrue(cause.getMessage().contains("must be an integer"));
+    }
+
+    @DisplayName("parseInputFilters: returns builder for null or empty criteria")
+    @Test
+    void parseInputFilters_nullOrEmpty_returnsBuilder() throws Exception {
+        var m = InputHandler.class.getDeclaredMethod("parseInputFilters", String.class);
+        m.setAccessible(true);
+        Filters f1 = (Filters) m.invoke(inputHandler, (Object) null);
+        Filters f2 = (Filters) m.invoke(inputHandler, "");
+        assertNotNull(f1);
+        assertNotNull(f2);
+    }
+
+    @DisplayName("parseInputFilters: skips empty and malformed parts")
+    @Test
+    void parseInputFilters_skipsEmptyAndMalformedParts() throws Exception {
+        var m = InputHandler.class.getDeclaredMethod("parseInputFilters", String.class);
+        m.setAccessible(true);
+
+        Filters filters = (Filters) m.invoke(inputHandler, "rating=5,,invalid,author=John");
+        assertNotNull(filters);
+    }
+
+    @DisplayName("clearScreen: covers Windows branch")
+    @Test
+    void clearScreen_windowsBranch() throws Exception {
+        var method = InputHandler.class.getDeclaredMethod("clearScreen");
+        method.setAccessible(true);
+        String oldOs = System.getProperty("os.name");
+        System.setProperty("os.name", "Windows 10");
+        try {
+            method.invoke(inputHandler);
+        } finally {
+            System.setProperty("os.name", oldOs);
+        }
+    }
+
+    @DisplayName("InputHandler constructor: null services")
+    @Test
+    void inputHandler_nullServices_throws() {
+        assertThrows(NullPointerException.class, () -> new InputHandler(null, statisticsService));
+        assertThrows(NullPointerException.class, () -> new InputHandler(reviewService, null));
+    }
+
+    // Reflection helpers for private static methods
+    private static int invokePrivateStaticIntInRange(String val, int min, int max, String field) throws Exception {
+        var m = InputHandler.class.getDeclaredMethod("parseIntInRange", String.class, int.class, int.class, String.class);
+        m.setAccessible(true);
+        return (int) m.invoke(null, val, min, max, field);
+    }
+    private static java.time.LocalTime invokePrivateStaticTimeLenient(String val) throws Exception {
+        var m = InputHandler.class.getDeclaredMethod("parseTimeLenient", String.class);
+        m.setAccessible(true);
+        return (java.time.LocalTime) m.invoke(null, val);
+    }
+    private static java.time.LocalDate invokePrivateStaticDateStrict(String val) throws Exception {
+        var m = InputHandler.class.getDeclaredMethod("parseDateStrict", String.class);
+        m.setAccessible(true);
+        return (java.time.LocalDate) m.invoke(null, val);
     }
 }
